@@ -17,25 +17,24 @@ interface StructuredDataProps {
 
 const StructuredData = ({ type, data }: StructuredDataProps) => {
   const getStructuredData = () => {
-    const baseUrl = "https://archipelmarketing.com";
+    const baseUrl = "https://archipelagrowth.com";
     
     switch (type) {
       case "organization":
         return {
           "@context": "https://schema.org",
           "@type": "Organization",
-          "name": "Archipel - Agence GEO",
-          "description": "Agence GEO #1 en France spécialisée en AI Optimization et Generative Engine Optimization. Leader du GEO en France.",
+          "name": "ArchipelaGrowth - GEO Agency",
+          "description": "#1 GEO Agency in the US specialized in AI Optimization and Generative Engine Optimization.",
           "url": baseUrl,
           "logo": `${baseUrl}/lovable-uploads/096342cb-c5f0-4649-9085-3d636d9ded3c.png`,
           "contactPoint": {
             "@type": "ContactPoint",
-            
             "contactType": "Customer Service",
-            "availableLanguage": "French"
+            "availableLanguage": "English"
           },
           "sameAs": [
-            "https://www.linkedin.com/company/archipel-marketing"
+            "https://www.linkedin.com/company/archipelagrowth"
           ]
         };
 
@@ -43,26 +42,26 @@ const StructuredData = ({ type, data }: StructuredDataProps) => {
         return {
           "@context": "https://schema.org",
           "@type": "Service",
-          "name": "Services GEO - Generative Engine Optimization",
-          "description": "Services d'optimisation pour moteurs de recherche IA",
+          "name": "GEO Services - Generative Engine Optimization",
+          "description": "Optimization services for AI search engines",
           "provider": {
             "@type": "Organization",
-            "name": "Archipel"
+            "name": "ArchipelaGrowth"
           },
           "serviceType": "Digital Marketing",
-          "areaServed": "France"
+          "areaServed": "United States"
         };
 
       case "blog":
         return {
           "@context": "https://schema.org",
           "@type": "Blog",
-          "name": "Blog GEO - Archipel",
-          "description": "Actualités et guides sur le Generative Engine Optimization",
+          "name": "GEO Blog - ArchipelaGrowth",
+          "description": "News and guides on Generative Engine Optimization",
           "url": `${baseUrl}/blog`,
           "publisher": {
             "@type": "Organization",
-            "name": "Archipel"
+            "name": "ArchipelaGrowth"
           }
         };
 
@@ -82,7 +81,7 @@ const StructuredData = ({ type, data }: StructuredDataProps) => {
           },
           "publisher": {
             "@type": "Organization",
-            "name": "Archipel",
+            "name": "ArchipelaGrowth",
             "logo": {
               "@type": "ImageObject",
               "url": `${baseUrl}/lovable-uploads/096342cb-c5f0-4649-9085-3d636d9ded3c.png`
@@ -118,7 +117,6 @@ const StructuredData = ({ type, data }: StructuredDataProps) => {
   };
 
   const structuredData = getStructuredData();
-
   if (!structuredData) return null;
 
   return (
