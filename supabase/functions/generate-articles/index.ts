@@ -7,6 +7,7 @@ const corsHeaders = {
 };
 
 const FALLBACK_COMPETITOR_URLS = [
+  // GEO / AI Visibility
   'https://www.searchenginejournal.com/generative-engine-optimization/',
   'https://www.semrush.com/blog/geo-generative-engine-optimization/',
   'https://backlinko.com/generative-engine-optimization',
@@ -16,7 +17,42 @@ const FALLBACK_COMPETITOR_URLS = [
   'https://neilpatel.com/blog/generative-engine-optimization/',
   'https://www.brightedge.com/blog/generative-engine-optimization',
   'https://searchengineland.com/generative-engine-optimization-guide',
+  'https://agencyanalytics.com/blog/generative-engine-optimization',
+  // Agency Rankings
+  'https://clutch.co/seo-firms',
+  'https://www.g2.com/categories/seo-tools',
+  'https://www.forbes.com/advisor/business/best-seo-agencies/',
+  'https://www.techradar.com/best/best-seo-agencies',
+  'https://influencermarketinghub.com/geo-marketing-agencies/',
+  // ChatGPT / Perplexity Optimization
+  'https://www.searchenginejournal.com/chatgpt-seo/',
+  'https://backlinko.com/optimize-for-chatgpt',
+  'https://www.semrush.com/blog/chatgpt-search-optimization/',
+  'https://neilpatel.com/blog/chatgpt-seo/',
   'https://www.hubspot.com/marketing-statistics',
+  // AI Search
+  'https://www.searchenginejournal.com/ai-search-optimization/',
+  'https://searchengineland.com/ai-search-ranking-factors',
+  'https://www.conductor.com/academy/ai-search/',
+  'https://www.brightedge.com/blog/ai-search',
+  'https://moz.com/blog/ai-search-optimization',
+  // LLM Visibility
+  'https://www.semrush.com/blog/llm-optimization/',
+  'https://backlinko.com/llm-seo',
+  'https://ahrefs.com/blog/llm-optimization/',
+  'https://www.searchenginejournal.com/llm-visibility/',
+  'https://neilpatel.com/blog/llm-optimization/',
+  // GEO by City / Market
+  'https://clutch.co/seo-firms/new-york',
+  'https://clutch.co/seo-firms/san-francisco',
+  'https://clutch.co/seo-firms/los-angeles',
+  'https://clutch.co/seo-firms/chicago',
+  'https://clutch.co/seo-firms/austin',
+  'https://clutch.co/seo-firms/miami',
+  'https://clutch.co/seo-firms/boston',
+  'https://clutch.co/seo-firms/seattle',
+  'https://clutch.co/seo-firms/denver',
+  'https://clutch.co/seo-firms/atlanta',
 ];
 
 function jsonResponse(payload: unknown, status = 200) {
@@ -59,8 +95,8 @@ function parseJson(body: string, step: string) {
 
 function normalizeTargetCount(value: unknown) {
   const parsed = Number(value);
-  if (!Number.isFinite(parsed) || parsed <= 0) return 10;
-  return Math.min(Math.floor(parsed), 10);
+  if (!Number.isFinite(parsed) || parsed <= 0) return 40;
+  return Math.min(Math.floor(parsed), 50);
 }
 
 function extractPeecUrl(item: any): string | null {
@@ -371,17 +407,57 @@ async function clearExistingArticles(supabase: ReturnType<typeof createClient>) 
   console.log('Prep - Database: Existing articles cleared');
 }
 
+const BATCH_SIZE = 5;
+
+async function processBatch(
+  batch: Array<{ url: string; title: string; body: string }>,
+  batchIndex: number,
+  anthropicKey: string,
+  supabase: ReturnType<typeof createClient>,
+) {
+  console.log(`Batch ${batchIndex + 1}: Processing ${batch.length} articles in parallel...`);
+  const results = await Promise.allSettled(
+    batch.map(async (competitor) => {
+      const article = await generateArticle(anthropicKey, competitor);
+      const saved = await saveArticle(supabase, article, competitor.url);
+      return saved;
+    }),
+  );
+
+  const saved: Array<{ id: string; title: string; slug: string; status: string }> = [];
+  const errors: Array<{ step: string; url: string; error: string }> = [];
+
+  results.forEach((result, i) => {
+    if (result.status === 'fulfilled') {
+      saved.push(result.value);
+    } else {
+      const message = getErrorMessage(result.reason);
+      errors.push({
+        step: message.includes('Claude') || message.includes('Anthropic') || message.includes('HTTP 4') || message.includes('HTTP 5')
+          ? 'Step 4 - Claude'
+          : 'Step 5 - Database',
+        url: batch[i].url,
+        error: message,
+      });
+      console.error(`Batch ${batchIndex + 1}: Failed for ${batch[i].url}: ${message}`);
+    }
+  });
+
+  console.log(`Batch ${batchIndex + 1}: saved=${saved.length}, errors=${errors.length}`);
+  return { saved, errors };
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
-  let targetCount = 10;
+  let targetCount = 40;
   try {
     const body = await req.json();
     targetCount = normalizeTargetCount(body?.target_count);
   } catch {
-    targetCount = 10;
+    targetCount = 40;
   }
 
   const peecApiKey = Deno.env.get('PEEC_AI_API_KEY');
@@ -457,25 +533,20 @@ serve(async (req) => {
     return errorResponse('Prep - Clear existing articles', error);
   }
 
+  // Process in parallel batches of BATCH_SIZE
   const savedArticles: Array<{ id: string; title: string; slug: string; status: string }> = [];
   const processingErrors: Array<{ step: string; url: string; error: string }> = [];
+  const totalBatches = Math.ceil(scraped.length / BATCH_SIZE);
 
-  for (const competitor of scraped) {
-    try {
-      const article = await generateArticle(anthropicKey, competitor);
-      const saved = await saveArticle(supabase, article, competitor.url);
-      savedArticles.push(saved);
-    } catch (error) {
-      const message = getErrorMessage(error);
-      processingErrors.push({
-        step: message.includes('Claude') || message.includes('Anthropic') || message.includes('HTTP 4') || message.includes('HTTP 5')
-          ? 'Step 4 - Claude'
-          : 'Step 5 - Database',
-        url: competitor.url,
-        error: message,
-      });
-      console.error(`Article processing failed for ${competitor.url}: ${message}`);
-    }
+  console.log(`Processing ${scraped.length} articles in ${totalBatches} batches of ${BATCH_SIZE}...`);
+
+  for (let i = 0; i < scraped.length; i += BATCH_SIZE) {
+    const batch = scraped.slice(i, i + BATCH_SIZE);
+    const batchIndex = Math.floor(i / BATCH_SIZE);
+    const { saved, errors } = await processBatch(batch, batchIndex, anthropicKey, supabase);
+    savedArticles.push(...saved);
+    processingErrors.push(...errors);
+    console.log(`Progress: ${savedArticles.length}/${scraped.length} saved after batch ${batchIndex + 1}/${totalBatches}`);
   }
 
   if (savedArticles.length === 0) {
@@ -494,6 +565,8 @@ serve(async (req) => {
     source_url_count: competitorUrls.length,
     scraped_url_count: scraped.length,
     articles_saved: savedArticles.length,
+    total_batches: totalBatches,
+    batch_size: BATCH_SIZE,
     saved_titles: savedArticles.map((article) => article.title),
     articles: savedArticles,
     errors: processingErrors,
