@@ -5,7 +5,7 @@ import ServiceFaq from "@/components/ServiceFaq";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { useMergedArticles } from "@/hooks/useBlogArticles";
+import { usePipelineArticles } from "@/hooks/usePipelineArticles";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const TAG_STYLES: Record<string, string> = {
@@ -18,9 +18,19 @@ const TAG_STYLES: Record<string, string> = {
 };
 
 const FILTER_STYLES: Record<string, { active: string; inactive: string }> = {
+  "GEO": { active: "bg-[#0043F1] text-white border-[#0043F1]", inactive: "bg-white text-[#0043F1] border-[#0043F1] hover:bg-[#0043F1]/5" },
   "Agence GEO": { active: "bg-[#0043F1] text-white border-[#0043F1]", inactive: "bg-white text-[#0043F1] border-[#0043F1] hover:bg-[#0043F1]/5" },
   "Agence SEO IA": { active: "bg-[#010D3E] text-[#80FFE7] border-[#010D3E]", inactive: "bg-white text-[#010D3E] border-[#010D3E] hover:bg-[#010D3E]/5" },
   "Agence AIO": { active: "bg-[#061941] text-white border-[#061941]", inactive: "bg-white text-[#061941] border-[#061941] hover:bg-[#061941]/5" },
+};
+
+const formatDate = (dateStr: string | null): string => {
+  if (!dateStr) return "";
+  try {
+    return new Date(dateStr).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" });
+  } catch {
+    return dateStr;
+  }
 };
 
 const ArchipelBlog = () => {
@@ -28,7 +38,7 @@ const ArchipelBlog = () => {
   const [bubbleVisible, setBubbleVisible] = useState(false);
   const [showSecondBubble, setShowSecondBubble] = useState(false);
   const bubbleRef = useRef<HTMLDivElement>(null);
-  const { articles, categories, isLoading } = useMergedArticles();
+  const { articles, categories, isLoading } = usePipelineArticles();
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
@@ -54,15 +64,17 @@ const ArchipelBlog = () => {
         </div>
       </section>
 
-      <section className="pb-10">
-        <div className="max-w-5xl mx-auto px-4 flex flex-wrap justify-center gap-3">
-          <button onClick={() => setActiveFilter(null)} className={`px-6 py-2 text-sm font-inter font-medium rounded-full border transition-colors ${activeFilter === null ? "bg-[#010D3E] text-white border-[#010D3E]" : "bg-white text-[#010D3E] border-[#010D3E] hover:bg-[#010D3E]/5"}`}>All</button>
-          {categories.map((cat) => {
-            const styles = FILTER_STYLES[cat] || FILTER_STYLES["Agence GEO"];
-            return (<button key={cat} onClick={() => setActiveFilter(activeFilter === cat ? null : cat)} className={`px-6 py-2 text-sm font-inter font-medium rounded-full border transition-colors ${activeFilter === cat ? styles.active : styles.inactive}`}>{cat}</button>);
-          })}
-        </div>
-      </section>
+      {categories.length > 0 && (
+        <section className="pb-10">
+          <div className="max-w-5xl mx-auto px-4 flex flex-wrap justify-center gap-3">
+            <button onClick={() => setActiveFilter(null)} className={`px-6 py-2 text-sm font-inter font-medium rounded-full border transition-colors ${activeFilter === null ? "bg-[#010D3E] text-white border-[#010D3E]" : "bg-white text-[#010D3E] border-[#010D3E] hover:bg-[#010D3E]/5"}`}>All</button>
+            {categories.map((cat) => {
+              const styles = FILTER_STYLES[cat] || FILTER_STYLES["GEO"];
+              return (<button key={cat} onClick={() => setActiveFilter(activeFilter === cat ? null : cat)} className={`px-6 py-2 text-sm font-inter font-medium rounded-full border transition-colors ${activeFilter === cat ? styles.active : styles.inactive}`}>{cat}</button>);
+            })}
+          </div>
+        </section>
+      )}
 
       <section className="pb-20">
         <div className="max-w-5xl mx-auto px-4">
@@ -78,11 +90,20 @@ const ArchipelBlog = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {filteredArticles.map((article) => (
                 <Link key={article.slug} to={`/blog/${article.slug}`} className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300 block">
-                  <div className="aspect-[16/9] bg-gray-100 overflow-hidden"><img src={article.image} alt={article.title} className="w-full h-full object-cover" loading="lazy" /></div>
                   <div className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      {article.category && (
+                        <span className={`px-3 py-1 text-xs font-inter font-medium rounded-full border bg-white ${TAG_STYLES[article.category] || "text-[#0043F1] border-[#0043F1]"}`}>{article.category}</span>
+                      )}
+                      {article.estimated_read_time && (
+                        <span className="text-xs font-inter text-gray-400">{article.estimated_read_time}</span>
+                      )}
+                      {article.published_at && (
+                        <span className="text-xs font-inter text-gray-400 ml-auto">{formatDate(article.published_at)}</span>
+                      )}
+                    </div>
                     <h3 className="font-jakarta font-bold text-[#010D3E] text-lg mb-2">{article.title}</h3>
-                    <p className="font-inter text-sm text-[#010D3E]/60 mb-4 line-clamp-2">{article.description}</p>
-                    <div className="flex gap-2 mb-4 flex-wrap"><span className={`px-3 py-1 text-xs font-inter font-medium rounded-full border bg-white ${TAG_STYLES[article.category] || "text-[#0043F1] border-[#0043F1]"}`}>{article.category}</span></div>
+                    <p className="font-inter text-sm text-[#010D3E]/60 mb-4 line-clamp-2">{article.meta_description}</p>
                     <span className="font-inter text-sm font-medium text-[#0043F1] hover:text-[#0043F1]/80 transition-colors inline-flex items-center gap-1">Read article <span>→</span></span>
                   </div>
                 </Link>
