@@ -407,17 +407,57 @@ async function clearExistingArticles(supabase: ReturnType<typeof createClient>) 
   console.log('Prep - Database: Existing articles cleared');
 }
 
+const BATCH_SIZE = 5;
+
+async function processBatch(
+  batch: Array<{ url: string; title: string; body: string }>,
+  batchIndex: number,
+  anthropicKey: string,
+  supabase: ReturnType<typeof createClient>,
+) {
+  console.log(`Batch ${batchIndex + 1}: Processing ${batch.length} articles in parallel...`);
+  const results = await Promise.allSettled(
+    batch.map(async (competitor) => {
+      const article = await generateArticle(anthropicKey, competitor);
+      const saved = await saveArticle(supabase, article, competitor.url);
+      return saved;
+    }),
+  );
+
+  const saved: Array<{ id: string; title: string; slug: string; status: string }> = [];
+  const errors: Array<{ step: string; url: string; error: string }> = [];
+
+  results.forEach((result, i) => {
+    if (result.status === 'fulfilled') {
+      saved.push(result.value);
+    } else {
+      const message = getErrorMessage(result.reason);
+      errors.push({
+        step: message.includes('Claude') || message.includes('Anthropic') || message.includes('HTTP 4') || message.includes('HTTP 5')
+          ? 'Step 4 - Claude'
+          : 'Step 5 - Database',
+        url: batch[i].url,
+        error: message,
+      });
+      console.error(`Batch ${batchIndex + 1}: Failed for ${batch[i].url}: ${message}`);
+    }
+  });
+
+  console.log(`Batch ${batchIndex + 1}: saved=${saved.length}, errors=${errors.length}`);
+  return { saved, errors };
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
-  let targetCount = 10;
+  let targetCount = 40;
   try {
     const body = await req.json();
     targetCount = normalizeTargetCount(body?.target_count);
   } catch {
-    targetCount = 10;
+    targetCount = 40;
   }
 
   const peecApiKey = Deno.env.get('PEEC_AI_API_KEY');
@@ -493,25 +533,20 @@ serve(async (req) => {
     return errorResponse('Prep - Clear existing articles', error);
   }
 
+  // Process in parallel batches of BATCH_SIZE
   const savedArticles: Array<{ id: string; title: string; slug: string; status: string }> = [];
   const processingErrors: Array<{ step: string; url: string; error: string }> = [];
+  const totalBatches = Math.ceil(scraped.length / BATCH_SIZE);
 
-  for (const competitor of scraped) {
-    try {
-      const article = await generateArticle(anthropicKey, competitor);
-      const saved = await saveArticle(supabase, article, competitor.url);
-      savedArticles.push(saved);
-    } catch (error) {
-      const message = getErrorMessage(error);
-      processingErrors.push({
-        step: message.includes('Claude') || message.includes('Anthropic') || message.includes('HTTP 4') || message.includes('HTTP 5')
-          ? 'Step 4 - Claude'
-          : 'Step 5 - Database',
-        url: competitor.url,
-        error: message,
-      });
-      console.error(`Article processing failed for ${competitor.url}: ${message}`);
-    }
+  console.log(`Processing ${scraped.length} articles in ${totalBatches} batches of ${BATCH_SIZE}...`);
+
+  for (let i = 0; i < scraped.length; i += BATCH_SIZE) {
+    const batch = scraped.slice(i, i + BATCH_SIZE);
+    const batchIndex = Math.floor(i / BATCH_SIZE);
+    const { saved, errors } = await processBatch(batch, batchIndex, anthropicKey, supabase);
+    savedArticles.push(...saved);
+    processingErrors.push(...errors);
+    console.log(`Progress: ${savedArticles.length}/${scraped.length} saved after batch ${batchIndex + 1}/${totalBatches}`);
   }
 
   if (savedArticles.length === 0) {
@@ -530,6 +565,8 @@ serve(async (req) => {
     source_url_count: competitorUrls.length,
     scraped_url_count: scraped.length,
     articles_saved: savedArticles.length,
+    total_batches: totalBatches,
+    batch_size: BATCH_SIZE,
     saved_titles: savedArticles.map((article) => article.title),
     articles: savedArticles,
     errors: processingErrors,
