@@ -115,7 +115,7 @@ const AdminAuth = ({ children }: AdminAuthProps) => {
       <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center p-4">
         <div className="w-full max-w-sm">
           <div className="text-center mb-8">
-            <img src="/lovable-uploads/archipel-logo-blue.png" alt="Archipel" className="h-8 mx-auto mb-6" />
+            <img src="/lovable-uploads/archipelagrowth-logo.png" alt="ArchipelaGrowth" className="h-8 mx-auto mb-6" />
             <h1 className="font-jakarta text-2xl font-bold text-[#010D3E] mb-1">
               Administration
             </h1>
