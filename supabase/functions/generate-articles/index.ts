@@ -52,11 +52,11 @@ async function fetchPeecTopics(apiKey: string): Promise<{ topics: string[] }> {
       // Fallback to default GEO topics if API fails
       return {
         topics: [
-          "What is Generative Engine Optimization (GEO) and how does it work?",
-          "How to optimize content for AI search engines like ChatGPT and Perplexity",
-          "GEO vs SEO: Key differences and why you need both in 2025",
-          "How to get your brand cited by AI assistants",
-          "Best practices for AI-optimized content creation",
+          "What is Generative Engine Optimization (GEO) and how does it work in 2026?",
+          "How to optimize content for AI search engines like ChatGPT and Perplexity in 2026",
+          "GEO vs SEO: Key differences and why you need both in 2026",
+          "How to get your brand cited by AI assistants in 2026",
+          "Best practices for AI-optimized content creation in 2026",
         ]
       };
     }
