@@ -1,9 +1,7 @@
 
 import { Star } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
 
 const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/EWxt7F6dGZvE3HtB6";
 
@@ -14,12 +12,6 @@ interface GoogleReview {
   profileUrl: string | null;
   rating: number;
   relativeTime: string;
-}
-
-interface GoogleReviewsData {
-  rating: number;
-  totalReviews: number;
-  reviews: GoogleReview[];
 }
 
 const fallbackReviews: GoogleReview[] = [
@@ -48,29 +40,9 @@ const GoogleLogo = () => (
 );
 
 const TestimonialBubbles = () => {
-  const [reviewsData, setReviewsData] = useState<GoogleReviewsData | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const { data, error } = await supabase.functions.invoke('fetch-google-reviews');
-        if (error) throw error;
-        if (data?.success) {
-          setReviewsData(data);
-        }
-      } catch (err) {
-        console.error('Failed to fetch Google reviews:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchReviews();
-  }, []);
-
-  const reviews = reviewsData?.reviews?.length ? reviewsData.reviews : fallbackReviews;
-  const rating = reviewsData?.rating ?? 5.0;
-  const totalReviews = reviewsData?.totalReviews;
+  const reviews = fallbackReviews;
+  const rating = 5.0;
+  const totalReviews = undefined;
 
   return (
     <section className="py-16 bg-[#F8F9FA] overflow-hidden">
@@ -130,11 +102,8 @@ const TestimonialBubbles = () => {
           </div>
         </div>
 
-        {loading && (
-          <div className="flex justify-center pt-4">
-            <div className="w-5 h-5 border-2 border-[#0043F1]/30 border-t-[#0043F1] rounded-full animate-spin" />
-          </div>
-        )}
+
+
         <div className="flex justify-center mt-10">
           <Button asChild className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-bold px-8 py-3 text-base rounded-lg">
             <Link to="/contact#contact-form">Contact Us</Link>
