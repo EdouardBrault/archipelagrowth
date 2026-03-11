@@ -2,20 +2,18 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useMergedArticles } from "@/hooks/useBlogArticles";
+import { usePipelineArticles } from "@/hooks/usePipelineArticles";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const TAG_STYLES: Record<string, string> = {
+  "GEO": "text-[#0043F1] border-[#0043F1]",
   "GEO Agency": "text-[#0043F1] border-[#0043F1]",
   "AI SEO Agency": "text-[#80FFE7] border-[#80FFE7]",
   "AIO Agency": "text-[#061941] border-[#061941]",
-  "Agence GEO": "text-[#0043F1] border-[#0043F1]",
-  "Agence SEO IA": "text-[#80FFE7] border-[#80FFE7]",
-  "Agence AIO": "text-[#061941] border-[#061941]",
 };
 
 const LatestArticles = () => {
-  const { articles, isLoading } = useMergedArticles();
+  const { articles, isLoading } = usePipelineArticles();
   const displayedArticles = articles.slice(0, 4);
 
   if (!isLoading && displayedArticles.length === 0) return null;
