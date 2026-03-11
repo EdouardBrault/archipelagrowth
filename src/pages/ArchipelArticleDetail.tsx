@@ -8,6 +8,8 @@ import { ArrowLeft, ArrowRight, Plus, Clock, Calendar, ChevronRight } from "luci
 import { useState, useEffect, useRef, useMemo } from "react";
 import { usePipelineArticles, usePipelineArticleBySlug } from "@/hooks/usePipelineArticles";
 import { Skeleton } from "@/components/ui/skeleton";
+import ArticleBody from "@/components/BlogArticle/ArticleBody";
+import { extractHeadings } from "@/components/BlogArticle/ArticleBody";
 import DOMPurify from "dompurify";
 
 const TAG_STYLES: Record<string, string> = {
@@ -225,18 +227,39 @@ const ArchipelArticleDetail = () => {
         </section>
       )}
 
-      {/* Article Content */}
+      {/* Article Content with Sticky TOC */}
       <section className="py-12 md:py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className="prose prose-lg max-w-none font-inter
-              prose-headings:font-jakarta prose-headings:text-[#010D3E]
-              prose-p:text-[#010D3E]/80 prose-p:leading-relaxed
-              prose-a:text-[#0043F1] prose-a:no-underline hover:prose-a:underline
-              prose-strong:text-[#010D3E]
-              prose-table:border-collapse prose-th:bg-[#F0F4FF] prose-th:p-3 prose-td:p-3 prose-td:border prose-th:border"
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.body_html) }}
-          />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex gap-12">
+            {/* Sticky Table of Contents - desktop only */}
+            {(() => {
+              const headings = extractHeadings(article.body_html);
+              if (headings.length < 2) return null;
+              return (
+                <aside className="hidden xl:block w-64 shrink-0">
+                  <nav className="sticky top-28">
+                    <p className="font-jakarta font-bold text-[#010D3E] text-sm uppercase tracking-wider mb-4">Table of Contents</p>
+                    <ul className="space-y-2 border-l border-gray-200">
+                      {headings.map((h) => (
+                        <li key={h.id} className={h.level === 3 ? "pl-6" : "pl-4"}>
+                          <a
+                            href={`#${h.id}`}
+                            className="font-inter text-sm text-gray-500 hover:text-[#0043F1] transition-colors block py-1 leading-snug"
+                          >
+                            {h.text}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                </aside>
+              );
+            })()}
+            {/* Article body */}
+            <div className="flex-1 max-w-4xl">
+              <ArticleBody html={article.body_html} />
+            </div>
+          </div>
         </div>
       </section>
 
