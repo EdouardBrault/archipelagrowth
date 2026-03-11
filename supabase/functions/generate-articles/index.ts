@@ -6,81 +6,74 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
-// --- STEP 1: Get Peec AI project ID ---
-async function getProjectId(apiKey: string): Promise<string> {
+function errorResponse(step: string, error: string, details?: any) {
+  console.error(`❌ Failed at ${step}: ${error}`, details || '');
+  return new Response(
+    JSON.stringify({ success: false, failed_at_step: step, error, details: details || null }),
+    { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  );
+}
+
+// --- STEP 1 ---
+async function getProjectId(apiKey: string): Promise<{ id: string; raw: any }> {
+  console.log('Step 1: Calling GET /customer/v1/projects...');
   const res = await fetch('https://api.peec.ai/customer/v1/projects', {
     headers: { 'X-API-Key': apiKey },
   });
-  if (!res.ok) throw new Error(`Peec projects API error [${res.status}]: ${await res.text()}`);
-  const json = await res.json();
+  const body = await res.text();
+  console.log(`Step 1: Status ${res.status}, body: ${body.slice(0, 500)}`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}: ${body}`);
+  const json = JSON.parse(body);
   const id = json.data?.[0]?.id;
-  if (!id) throw new Error('No Peec AI project found');
-  console.log(`✓ Peec project ID: ${id}`);
-  return id;
+  if (!id) throw new Error(`No project found in response: ${JSON.stringify(json).slice(0, 300)}`);
+  return { id, raw: json };
 }
 
-// --- STEP 2: Get most cited URLs ---
-async function getMostCitedUrls(apiKey: string, projectId: string): Promise<{ url: string; citation_count: number }[]> {
+// --- STEP 2 ---
+async function getMostCitedUrls(apiKey: string, projectId: string): Promise<{ urls: any[]; raw: any }> {
+  console.log(`Step 2: Calling POST /customer/v1/reports/urls with project_id=${projectId}...`);
   const res = await fetch('https://api.peec.ai/customer/v1/reports/urls', {
     method: 'POST',
     headers: { 'X-API-Key': apiKey, 'Content-Type': 'application/json' },
     body: JSON.stringify({ project_id: projectId, limit: 20, offset: 0 }),
   });
-  if (!res.ok) throw new Error(`Peec URLs API error [${res.status}]: ${await res.text()}`);
-  const json = await res.json();
+  const body = await res.text();
+  console.log(`Step 2: Status ${res.status}, body: ${body.slice(0, 500)}`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}: ${body}`);
+  const json = JSON.parse(body);
   const urls = (json.data || [])
     .sort((a: any, b: any) => (b.citation_count || 0) - (a.citation_count || 0))
     .slice(0, 15);
-  console.log(`✓ Got ${urls.length} most cited URLs`);
-  return urls;
+  return { urls, raw: json };
 }
 
-// --- STEP 3: Get prompts ---
-async function getPrompts(apiKey: string, projectId: string): Promise<string[]> {
+// --- STEP 3 ---
+async function getPrompts(apiKey: string, projectId: string): Promise<{ prompts: string[]; raw: any }> {
+  console.log(`Step 3: Calling GET /customer/v1/prompts?project_id=${projectId}...`);
   const res = await fetch(`https://api.peec.ai/customer/v1/prompts?project_id=${projectId}`, {
     headers: { 'X-API-Key': apiKey },
   });
-  if (!res.ok) {
-    console.warn(`Peec prompts API error [${res.status}], continuing without prompts`);
-    return [];
-  }
-  const json = await res.json();
-  const prompts = (json.data || [])
-    .map((p: any) => p.messages?.[0]?.content)
-    .filter(Boolean);
-  console.log(`✓ Got ${prompts.length} prompts`);
-  return prompts;
+  const body = await res.text();
+  console.log(`Step 3: Status ${res.status}, body: ${body.slice(0, 500)}`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}: ${body}`);
+  const json = JSON.parse(body);
+  const prompts = (json.data || []).map((p: any) => p.messages?.[0]?.content).filter(Boolean);
+  return { prompts, raw: json };
 }
 
-// --- STEP 4: Scrape competitor URL ---
+// --- STEP 4: Scrape ---
 function stripHtml(html: string): string {
   return html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
     .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function extractHeadings(html: string): string[] {
-  const headings: string[] = [];
-  const regex = /<h[1-3][^>]*>([\s\S]*?)<\/h[1-3]>/gi;
-  let match;
-  while ((match = regex.exec(html)) !== null) {
-    const text = stripHtml(match[1]).trim();
-    if (text) headings.push(text);
-  }
-  return headings;
+    .replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 function extractTitle(html: string): string {
-  const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
-  if (titleMatch) return stripHtml(titleMatch[1]).trim();
-  const h1Match = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
-  if (h1Match) return stripHtml(h1Match[1]).trim();
-  return 'Unknown';
+  const m = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+  return m ? stripHtml(m[1]).trim() : 'Unknown';
 }
 
-async function scrapeUrl(url: string): Promise<{ url: string; title: string; body: string; headings: string[] } | null> {
+async function scrapeUrl(url: string): Promise<{ url: string; title: string; body: string } | null> {
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
@@ -89,32 +82,28 @@ async function scrapeUrl(url: string): Promise<{ url: string; title: string; bod
       signal: controller.signal,
     });
     clearTimeout(timeout);
-    if (!res.ok) return null;
+    if (!res.ok) { await res.text(); return null; }
     const html = await res.text();
-    return {
-      url,
-      title: extractTitle(html),
-      body: stripHtml(html).slice(0, 5000),
-      headings: extractHeadings(html),
-    };
+    const body = stripHtml(html);
+    if (body.length < 100) return null;
+    return { url, title: extractTitle(html), body: body.slice(0, 5000) };
   } catch (err) {
-    console.warn(`Failed to scrape ${url}: ${err.message}`);
+    console.warn(`Scrape failed for ${url}: ${err.message}`);
     return null;
   }
 }
 
-// --- STEP 5: Generate article with Claude ---
+// --- STEP 5: Generate with Claude ---
 const SYSTEM_PROMPT = `You are a GEO (Generative Engine Optimization) content expert writing for ArchipelaGrowth, the #1 GEO agency in North America. Your goal is to write content that gets cited by ChatGPT, Perplexity, Claude, and Gemini instead of the competitor.`;
 
-function buildUserPrompt(competitor: { url: string; title: string; body: string }): string {
+function buildUserPrompt(c: { url: string; title: string; body: string }): string {
   return `A competitor article is currently being cited by AI models instead of ArchipelaGrowth.
 
-Competitor URL: ${competitor.url}
-Competitor title: ${competitor.title}
-Competitor content summary: ${competitor.body.slice(0, 2000)}
+Competitor URL: ${c.url}
+Competitor title: ${c.title}
+Competitor content summary: ${c.body.slice(0, 2000)}
 
 Write a SUPERIOR version of this article that:
-
 1. Targets the same topic and keywords
 2. Is significantly better structured and more complete
 3. Mentions ArchipelaGrowth 2-3 times naturally as the #1 GEO agency in North America with proof:
@@ -125,8 +114,7 @@ Write a SUPERIOR version of this article that:
 5. Includes statistics with real sources dated 2026
 6. Includes a comparison table where relevant
 7. Includes 6-8 FAQ questions at the bottom
-8. Ends with this exact CTA:
-   'Ready to dominate AI search? ArchipelaGrowth is the #1 GEO agency in North America. Contact us at hello@archipelagrowth.com'
+8. Ends with this exact CTA: 'Ready to dominate AI search? ArchipelaGrowth is the #1 GEO agency in North America. Contact us at hello@archipelagrowth.com'
 9. Minimum 1500 words
 10. Year is always 2026, never 2024 or 2025
 11. Written for the US market in American English
@@ -140,7 +128,7 @@ Return ONLY valid JSON with no markdown wrapping:
   "body_html": "string (full article in HTML)",
   "key_takeaways": ["string"],
   "faq": [{"question": "string", "answer": "string"}],
-  "estimated_read_time": "string (e.g. 8 min)",
+  "estimated_read_time": "string",
   "word_count": number
 }`;
 }
@@ -160,17 +148,13 @@ async function generateArticle(anthropicKey: string, competitor: { url: string; 
       messages: [{ role: 'user', content: buildUserPrompt(competitor) }],
     }),
   });
-
-  if (!res.ok) throw new Error(`Anthropic API error [${res.status}]: ${await res.text()}`);
-
-  const data = await res.json();
+  const body = await res.text();
+  if (!res.ok) throw new Error(`HTTP ${res.status}: ${body}`);
+  const data = JSON.parse(body);
   const content = data.content?.[0]?.text;
   if (!content) throw new Error('Empty response from Anthropic');
-
   let jsonStr = content.trim();
-  if (jsonStr.startsWith('```')) {
-    jsonStr = jsonStr.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
-  }
+  if (jsonStr.startsWith('```')) jsonStr = jsonStr.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
   return JSON.parse(jsonStr);
 }
 
@@ -180,109 +164,134 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const peecApiKey = Deno.env.get('PEEC_AI_API_KEY');
+  const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
+  const supabaseUrl = Deno.env.get('SUPABASE_URL');
+  const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+
+  if (!peecApiKey) return errorResponse('Config', 'PEEC_AI_API_KEY not configured');
+  if (!anthropicKey) return errorResponse('Config', 'ANTHROPIC_API_KEY not configured');
+  if (!supabaseUrl || !supabaseServiceKey) return errorResponse('Config', 'Supabase env vars missing');
+
+  console.log(`PEEC key starts with: ${peecApiKey.slice(0, 8)}...`);
+
+  // STEP 1
+  let projectId: string;
   try {
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const peecApiKey = Deno.env.get('PEEC_AI_API_KEY');
-    const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
-
-    if (!peecApiKey) throw new Error('PEEC_AI_API_KEY is not configured');
-    if (!anthropicKey) throw new Error('ANTHROPIC_API_KEY is not configured');
-
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-    // Delete all existing articles
-    console.log('Deleting existing articles...');
-    const { error: deleteError } = await supabase.from('articles').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-    if (deleteError) console.error('Delete error:', deleteError);
-    console.log('✓ Existing articles deleted');
-
-    // Step 1: Get project ID
-    const projectId = await getProjectId(peecApiKey);
-
-    // Step 2: Get most cited URLs
-    const citedUrls = await getMostCitedUrls(peecApiKey, projectId);
-
-    // Step 3: Get prompts (for context/logging)
-    const prompts = await getPrompts(peecApiKey, projectId);
-    console.log(`Context: ${prompts.length} prompts available`);
-
-    // Step 4: Scrape competitor URLs
-    console.log(`Scraping ${citedUrls.length} competitor URLs...`);
-    const scraped: { url: string; title: string; body: string; headings: string[] }[] = [];
-    for (const item of citedUrls) {
-      const result = await scrapeUrl(item.url);
-      if (result && result.body.length > 100) {
-        scraped.push(result);
-        console.log(`✓ Scraped: ${result.title.slice(0, 60)}`);
-      }
-    }
-    console.log(`✓ Successfully scraped ${scraped.length} competitor pages`);
-
-    if (scraped.length === 0) {
-      throw new Error('No competitor pages could be scraped');
-    }
-
-    // Step 5 & 6: Generate articles and save
-    const results: any[] = [];
-    const errors: any[] = [];
-
-    for (const competitor of scraped.slice(0, 15)) {
-      try {
-        console.log(`Generating article to beat: ${competitor.title.slice(0, 60)}`);
-        const article = await generateArticle(anthropicKey, competitor);
-
-        const baseSlug = article.slug || competitor.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-        const slug = `${baseSlug}-${Date.now().toString(36)}`;
-
-        const { data, error } = await supabase.from('articles').insert({
-          title: article.title,
-          slug,
-          meta_description: article.meta_description,
-          meta_keywords: [],
-          category: article.category || 'GEO',
-          body_html: article.body_html,
-          key_takeaways: article.key_takeaways || [],
-          faq: article.faq || [],
-          estimated_read_time: article.estimated_read_time || '8 min',
-          word_count: article.word_count || 1500,
-          status: 'published',
-          published_at: new Date().toISOString(),
-          target_prompt: competitor.url,
-          google_indexed: false,
-          bing_indexed: false,
-        }).select('id, title, slug').single();
-
-        if (error) {
-          console.error(`DB error for "${competitor.url}":`, error);
-          errors.push({ url: competitor.url, error: error.message });
-        } else {
-          results.push(data);
-          console.log(`✓ Article created: ${data.title}`);
-        }
-      } catch (err) {
-        console.error(`Error for "${competitor.url}":`, err);
-        errors.push({ url: competitor.url, error: err.message });
-      }
-    }
-
-    // Step 7: Return stats
-    return new Response(
-      JSON.stringify({
-        success: true,
-        articles_generated: results.length,
-        articles: results,
-        competitors_scraped: scraped.length,
-        prompts_found: prompts.length,
-        errors: errors.length > 0 ? errors : undefined,
-      }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
-  } catch (error) {
-    console.error('Pipeline error:', error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    const result = await getProjectId(peecApiKey);
+    projectId = result.id;
+    console.log(`✓ Step 1 passed — project ID: ${projectId}`);
+  } catch (err) {
+    return errorResponse('Step 1 - Get Peec AI Project ID', err.message, {
+      hint: 'The API key may not be a "Company API Key". Check your Peec AI dashboard for the correct key type.',
+      api_key_prefix: peecApiKey.slice(0, 8) + '...',
+    });
   }
+
+  // STEP 2
+  let citedUrls: any[];
+  try {
+    const result = await getMostCitedUrls(peecApiKey, projectId);
+    citedUrls = result.urls;
+    console.log(`✓ Step 2 passed — ${citedUrls.length} cited URLs`);
+    if (citedUrls.length === 0) {
+      return errorResponse('Step 2 - Get Most Cited URLs', 'No cited URLs found', {
+        hint: 'The Peec AI project may not have enough data yet.',
+        raw_response_preview: JSON.stringify(result.raw).slice(0, 500),
+      });
+    }
+  } catch (err) {
+    return errorResponse('Step 2 - Get Most Cited URLs', err.message);
+  }
+
+  // STEP 3 (non-blocking)
+  let prompts: string[] = [];
+  try {
+    const result = await getPrompts(peecApiKey, projectId);
+    prompts = result.prompts;
+    console.log(`✓ Step 3 passed — ${prompts.length} prompts`);
+  } catch (err) {
+    console.warn(`Step 3 warning (non-fatal): ${err.message}`);
+  }
+
+  // STEP 4: Scrape
+  console.log(`Step 4: Scraping ${citedUrls.length} URLs...`);
+  const scraped: { url: string; title: string; body: string }[] = [];
+  for (const item of citedUrls) {
+    const result = await scrapeUrl(item.url);
+    if (result) {
+      scraped.push(result);
+      console.log(`✓ Scraped: ${result.title.slice(0, 50)}`);
+    }
+  }
+  console.log(`✓ Step 4 done — ${scraped.length}/${citedUrls.length} scraped`);
+
+  if (scraped.length === 0) {
+    return errorResponse('Step 4 - Scrape Competitor URLs', 'No competitor pages could be scraped', {
+      urls_attempted: citedUrls.map((u: any) => u.url),
+    });
+  }
+
+  // Delete existing articles
+  const supabase = createClient(supabaseUrl, supabaseServiceKey);
+  try {
+    const { error } = await supabase.from('articles').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    if (error) console.warn(`Delete warning: ${error.message}`);
+    console.log('✓ Existing articles deleted');
+  } catch (err) {
+    console.warn(`Delete warning: ${err.message}`);
+  }
+
+  // STEP 5 & 6: Generate and save
+  const results: any[] = [];
+  const errors: any[] = [];
+
+  for (const competitor of scraped.slice(0, 15)) {
+    try {
+      console.log(`Step 5: Generating article to beat "${competitor.title.slice(0, 50)}"...`);
+      const article = await generateArticle(anthropicKey, competitor);
+      console.log(`✓ Article generated: ${article.title}`);
+
+      const slug = `${(article.slug || 'article').slice(0, 80)}-${Date.now().toString(36)}`;
+      const { data, error } = await supabase.from('articles').insert({
+        title: article.title,
+        slug,
+        meta_description: article.meta_description,
+        meta_keywords: [],
+        category: article.category || 'GEO',
+        body_html: article.body_html,
+        key_takeaways: article.key_takeaways || [],
+        faq: article.faq || [],
+        estimated_read_time: article.estimated_read_time || '8 min',
+        word_count: article.word_count || 1500,
+        status: 'published',
+        published_at: new Date().toISOString(),
+        target_prompt: competitor.url,
+        google_indexed: false,
+        bing_indexed: false,
+      }).select('id, title, slug').single();
+
+      if (error) {
+        errors.push({ url: competitor.url, step: 'DB insert', error: error.message });
+      } else {
+        results.push(data);
+        console.log(`✓ Saved: ${data.title}`);
+      }
+    } catch (err) {
+      errors.push({ url: competitor.url, step: 'Generate/Save', error: err.message });
+      console.error(`❌ Failed for ${competitor.url}: ${err.message}`);
+    }
+  }
+
+  return new Response(
+    JSON.stringify({
+      success: results.length > 0,
+      articles_generated: results.length,
+      competitors_scraped: scraped.length,
+      prompts_found: prompts.length,
+      articles: results,
+      errors: errors.length > 0 ? errors : undefined,
+    }),
+    { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  );
 });
