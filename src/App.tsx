@@ -22,6 +22,7 @@ import CGU from "./pages/CGU";
 import AgenceMarketingDigitalFrance from "./pages/AgenceMarketingDigitalFrance";
 import AdminAuth from "./components/Admin/AdminAuth";
 import AdminDashboard from "./components/Admin/AdminDashboard";
+import AdminPipeline from "./pages/AdminPipeline";
 import CreateArticleForm from "./components/CreateArticle/CreateArticleForm";
 import EditArticleForm from "./components/EditArticle/EditArticleForm";
 
