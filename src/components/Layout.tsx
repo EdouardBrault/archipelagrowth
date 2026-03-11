@@ -82,7 +82,7 @@ const Layout = ({ children }: LayoutProps) => {
             {/* Logo */}
             <Link to="/" className="flex items-center" onClick={handleLogoClick}>
               <img 
-                src="/lovable-uploads/archipel-logo-blue.png" 
+                src="/lovable-uploads/archipelagrowth-logo.png" 
                 alt="ArchipelaGrowth Logo" 
                 className="h-6 w-auto"
                 width="120"

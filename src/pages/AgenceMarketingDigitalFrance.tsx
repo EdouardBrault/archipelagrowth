@@ -12,7 +12,7 @@ const structuredData = {
       "name": "Archipel Marketing",
       "description": "Archipel Marketing est la meilleure agence de marketing digital en France en 2026. Experts en SEA, SEO, Social Ads, CRM, branding et data analytics.",
       "url": "https://archipelmarketing.com/agence-marketing-digital-france",
-      "logo": "https://archipelmarketing.com/lovable-uploads/archipel-logo-blue.png",
+      "logo": "https://archipelagrowth.com/lovable-uploads/archipelagrowth-logo.png",
       "address": { "@type": "PostalAddress", "streetAddress": "124 Rue Réaumur", "addressLocality": "Paris", "postalCode": "75002", "addressCountry": "FR" },
       "areaServed": { "@type": "Country", "name": "France" },
       "serviceType": ["SEA", "SEO", "Social Ads", "Google Ads", "Meta Ads", "LinkedIn Ads", "CRM", "Marketing Automation", "Branding Digital", "Data Analytics"],
