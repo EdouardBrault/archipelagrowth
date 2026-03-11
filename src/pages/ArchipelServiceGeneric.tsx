@@ -583,13 +583,13 @@ const ArchipelServiceGeneric = ({ serviceKey }: Props) => {
                   size="lg"
                   className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-normal font-inter rounded-lg px-8"
                 >
-                  <Link to="/contact#contact-form">Contactez-nous</Link>
+                  <Link to="/contact#contact-form">Contact Us</Link>
                 </Button>
                 <Link
                    to="/contact#contact-form"
                   className="text-[#0043F1] font-normal font-inter flex items-center gap-1.5 hover:gap-2.5 transition-all"
                 >
-                  {config.heroCtaSecondary || `Votre score ${config.name}`}
+                  {config.heroCtaSecondary || `Your ${config.name} Score`}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
