@@ -43,8 +43,8 @@ const AboutUs = () => {
             {/* Logo Archipel */}
             <div className="mb-6">
               <img 
-                src="/lovable-uploads/096342cb-c5f0-4649-9085-3d636d9ded3c.png" 
-                alt="Archipel Logo" 
+                src="/lovable-uploads/archipelagrowth-logo.png" 
+                alt="ArchipelaGrowth Logo" 
                 className="h-8 w-auto"
                 width="160"
                 height="32"

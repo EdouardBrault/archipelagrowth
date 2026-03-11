@@ -115,7 +115,7 @@ const AdminAuth = ({ children }: AdminAuthProps) => {
       <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center p-4">
         <div className="w-full max-w-sm">
           <div className="text-center mb-8">
-            <img src="/lovable-uploads/archipel-logo-blue.png" alt="Archipel" className="h-8 mx-auto mb-6" />
+            <img src="/lovable-uploads/archipelagrowth-logo.png" alt="ArchipelaGrowth" className="h-8 mx-auto mb-6" />
             <h1 className="font-jakarta text-2xl font-bold text-[#010D3E] mb-1">
               Administration
             </h1>
@@ -202,7 +202,7 @@ const AdminAuth = ({ children }: AdminAuthProps) => {
       <header className="bg-white border-b border-[#E5E7EB] sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/lovable-uploads/archipel-logo-blue.png" alt="Archipel" className="h-6" />
+            <img src="/lovable-uploads/archipelagrowth-logo.png" alt="ArchipelaGrowth" className="h-6" />
             <span className="text-[#010D3E]/30 font-inter text-sm">|</span>
             <span className="text-[#010D3E]/50 font-inter text-sm">Admin</span>
           </div>
