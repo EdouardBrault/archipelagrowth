@@ -30,43 +30,32 @@ const TestezVousPaid = () => {
           <div className="md:w-1/2 text-left">
             <div className="mb-4">
               <span className="border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-full">
-                Testez-vous
+                Test Yourself
               </span>
             </div>
             <h2 className="font-jakarta text-4xl md:text-5xl font-bold mb-6 leading-tight">
               <span className="bg-gradient-to-r from-[#000000] to-[#001354] bg-clip-text text-transparent">
-                Envie d'auditer votre stratégie d'acquisition actuelle ?
+                Want to audit your current acquisition strategy?
               </span>
             </h2>
             <p className="text-lg text-[#010D3E] font-inter mb-3">
-              Souhaitez-vous auditer vos comptes paid et social ?
+              Want to audit your paid and social accounts?
             </p>
             <p className="text-[#010D3E]/70 font-inter leading-relaxed mb-6 text-sm">
-              Chez Archipel Marketing, nous proposons des audits paid. Nous délivrons un scoring de votre stratégie d'acquisition avec une roadmap pour améliorer vos performances à l'avenir.
+              At ArchipelaGrowth, we offer paid media audits. We deliver a performance score for your acquisition strategy with a roadmap to improve future results.
             </p>
-            <Button
-              asChild
-              className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-normal px-8 py-3 text-base rounded-lg font-inter"
-            >
-              <Link to="/contact#contact-form">Demander un audit Paid</Link>
+            <Button asChild className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-normal px-8 py-3 text-base rounded-lg font-inter">
+              <Link to="/contact#contact-form">Request a Paid Audit</Link>
             </Button>
           </div>
 
           <div className="md:w-1/2" ref={ref}>
             <div className="rounded-2xl p-8 space-y-4 min-h-[220px] bg-cover bg-center" style={{ backgroundImage: "url('/lovable-uploads/mesh-gradient-5.png')" }}>
-              <div
-                className={`bg-white/30 backdrop-blur-md text-[#010D3E] rounded-2xl rounded-bl-none px-5 py-4 font-inter text-sm leading-relaxed max-w-[85%] ml-auto transition-all duration-500 origin-bottom-right ${
-                  visible ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-0 translate-y-4"
-                }`}
-              >
-                Envie de découvrir les marges d'optimisations que vous pouvez aller chercher ?
+              <div className={`bg-white/30 backdrop-blur-md text-[#010D3E] rounded-2xl rounded-bl-none px-5 py-4 font-inter text-sm leading-relaxed max-w-[85%] ml-auto transition-all duration-500 origin-bottom-right ${visible ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-0 translate-y-4"}`}>
+                Want to discover the optimization margins you can unlock?
               </div>
-              <div
-                className={`bg-white/30 backdrop-blur-md text-[#010D3E] rounded-2xl rounded-br-none px-5 py-4 font-inter text-sm leading-relaxed max-w-[85%] transition-all duration-500 origin-bottom-left ${
-                  showSecond ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-0 translate-y-4"
-                }`}
-              >
-                Vous pensez que vos landing pages sont perfectibles ?
+              <div className={`bg-white/30 backdrop-blur-md text-[#010D3E] rounded-2xl rounded-br-none px-5 py-4 font-inter text-sm leading-relaxed max-w-[85%] transition-all duration-500 origin-bottom-left ${showSecond ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-0 translate-y-4"}`}>
+                Think your landing pages could be performing better?
               </div>
             </div>
           </div>

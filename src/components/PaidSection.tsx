@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef } from "react";
 
 const orbitLogos = [
@@ -39,19 +38,17 @@ const PaidSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Desktop positions matching reference layout (x, y from center)
   const desktopPositions = [
-    { x: 220, y: -120 },   // Lovable – top right
-    { x: -220, y: -120 },  // Pinterest ads – top left
-    { x: 300, y: 0 },      // Bing ads – far right, center
-    { x: 100, y: -170 },   // Reddit – top center-right
-    { x: -300, y: 0 },     // HubSpot – far left, center
-    { x: -100, y: -170 },  // SnapChat – top center-left
-    { x: -200, y: 120 },   // Google Ads – bottom left
-    { x: 200, y: 120 },    // YouTube – bottom right
+    { x: 220, y: -120 },
+    { x: -220, y: -120 },
+    { x: 300, y: 0 },
+    { x: 100, y: -170 },
+    { x: -300, y: 0 },
+    { x: -100, y: -170 },
+    { x: -200, y: 120 },
+    { x: 200, y: 120 },
   ];
 
-  // Mobile positions (scaled down)
   const mobilePositions = desktopPositions.map(p => ({
     x: p.x * 0.45,
     y: p.y * 0.45,
@@ -81,18 +78,18 @@ const PaidSection = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="flex justify-center mb-6">
           <span className="border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-full">
-            On se présente
+            About Us
           </span>
         </div>
 
         <h2 className="font-jakarta text-4xl md:text-5xl font-bold mb-6 leading-tight">
           <span className="bg-gradient-to-r from-[#000000] to-[#001354] bg-clip-text text-transparent">
-            Chez Archipel Marketing, nous faisons aussi du paid
+            At ArchipelaGrowth, we also do paid media
           </span>
         </h2>
 
         <p className="text-lg text-[#010D3E] mb-12 max-w-2xl mx-auto leading-relaxed font-inter">
-          Faire du GEO, c'est bien, mais ce n'est pas le seul levier pour générer du lead ou des achats. C'est pourquoi nos consultants sont aussi spécialisés sur les leviers suivants.
+          GEO is powerful, but it's not the only lever for generating leads or conversions. That's why our consultants also specialize in the following channels.
         </p>
 
         <div
@@ -105,17 +102,10 @@ const PaidSection = () => {
             aspectRatio: "16 / 9",
           }}
         >
-          {/* Meta Ads center */}
           <div className="absolute inset-0 flex items-center justify-center z-10">
-            <img
-              src="/lovable-uploads/paid-logo-meta-dark.png"
-              alt="Meta Ads"
-              className="h-10 md:h-24 w-auto object-contain"
-              loading="lazy"
-            />
+            <img src="/lovable-uploads/paid-logo-meta-dark.png" alt="Meta Ads" className="h-10 md:h-24 w-auto object-contain" loading="lazy" />
           </div>
 
-          {/* Orbiting logos */}
           {orbitLogos.map((logo, i) => {
             const x = desktopPositions[i].x;
             const y = desktopPositions[i].y;
@@ -140,12 +130,7 @@ const PaidSection = () => {
                   zIndex: 5,
                 } as React.CSSProperties}
               >
-                <img
-                  src={logo.src}
-                  alt={logo.alt}
-                  className="paid-orbit-logo h-10 md:h-32 w-auto object-contain cursor-pointer"
-                  loading="lazy"
-                />
+                <img src={logo.src} alt={logo.alt} className="paid-orbit-logo h-10 md:h-32 w-auto object-contain cursor-pointer" loading="lazy" />
               </div>
             );
           })}

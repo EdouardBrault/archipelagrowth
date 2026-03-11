@@ -6,6 +6,9 @@ import { useMergedArticles } from "@/hooks/useBlogArticles";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const TAG_STYLES: Record<string, string> = {
+  "GEO Agency": "text-[#0043F1] border-[#0043F1]",
+  "AI SEO Agency": "text-[#80FFE7] border-[#80FFE7]",
+  "AIO Agency": "text-[#061941] border-[#061941]",
   "Agence GEO": "text-[#0043F1] border-[#0043F1]",
   "Agence SEO IA": "text-[#80FFE7] border-[#80FFE7]",
   "Agence AIO": "text-[#061941] border-[#061941]",
@@ -22,17 +25,15 @@ const LatestArticles = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <div className="flex justify-center mb-4">
-            <span className="border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-full">
-              Blog
-            </span>
+            <span className="border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-full">Blog</span>
           </div>
           <h2 className="font-jakarta text-4xl md:text-5xl font-bold mb-6 leading-tight">
             <span className="bg-gradient-to-r from-[#000000] to-[#001354] bg-clip-text text-transparent">
-              Nos derniers articles
+              Latest Articles
             </span>
           </h2>
           <p className="font-inter text-[#010D3E]/70 text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
-            Envie d'en apprendre plus sur le GEO ? On partage nos découvertes dans la section blog : infographies, méthodes, résultats... tout ce qu'il faut savoir pour progresser sur ce sujet !
+            Want to learn more about GEO? We share our findings in the blog: infographics, methods, results... everything you need to know to stay ahead!
           </p>
         </div>
 
@@ -49,11 +50,7 @@ const LatestArticles = () => {
                 </div>
               ))
             : displayedArticles.map((article) => (
-                <Link
-                  key={article.slug}
-                  to={`/blog/${article.slug}`}
-                  className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300 block"
-                >
+                <Link key={article.slug} to={`/blog/${article.slug}`} className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300 block">
                   <div className="aspect-[16/9] overflow-hidden">
                     <img src={article.image} alt={article.title} className="w-full h-full object-cover" loading="lazy" />
                   </div>
@@ -64,7 +61,7 @@ const LatestArticles = () => {
                     <h3 className="font-jakarta font-bold text-[#010D3E] text-base mb-2 line-clamp-2">{article.title}</h3>
                     <p className="font-inter text-sm text-[#010D3E]/60 mb-3 line-clamp-2">{article.description}</p>
                     <span className="font-inter text-sm font-medium text-[#0043F1] inline-flex items-center gap-1">
-                      Lire l'article <span>→</span>
+                      Read article <span>→</span>
                     </span>
                   </div>
                 </Link>
@@ -72,12 +69,9 @@ const LatestArticles = () => {
         </div>
 
         <div className="text-center">
-          <Button
-            asChild
-            className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-inter font-normal rounded-lg px-8"
-          >
+          <Button asChild className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-inter font-normal rounded-lg px-8">
             <Link to="/blog" className="flex items-center gap-2">
-              Voir notre blog
+              View our blog
               <ArrowRight className="w-5 h-5" />
             </Link>
           </Button>
