@@ -38,6 +38,81 @@ export type Database = {
         }
         Relationships: []
       }
+      articles: {
+        Row: {
+          bing_indexed: boolean | null
+          bing_indexed_at: string | null
+          body_html: string
+          category: string | null
+          created_at: string | null
+          estimated_read_time: string | null
+          faq: Json | null
+          google_indexed: boolean | null
+          google_indexed_at: string | null
+          id: string
+          key_takeaways: string[] | null
+          meta_description: string | null
+          meta_keywords: string[] | null
+          published_at: string | null
+          schema_markup: Json | null
+          slug: string
+          status: string | null
+          target_prompt: string | null
+          title: string
+          topic_id: string | null
+          updated_at: string | null
+          word_count: number | null
+        }
+        Insert: {
+          bing_indexed?: boolean | null
+          bing_indexed_at?: string | null
+          body_html: string
+          category?: string | null
+          created_at?: string | null
+          estimated_read_time?: string | null
+          faq?: Json | null
+          google_indexed?: boolean | null
+          google_indexed_at?: string | null
+          id?: string
+          key_takeaways?: string[] | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          published_at?: string | null
+          schema_markup?: Json | null
+          slug: string
+          status?: string | null
+          target_prompt?: string | null
+          title: string
+          topic_id?: string | null
+          updated_at?: string | null
+          word_count?: number | null
+        }
+        Update: {
+          bing_indexed?: boolean | null
+          bing_indexed_at?: string | null
+          body_html?: string
+          category?: string | null
+          created_at?: string | null
+          estimated_read_time?: string | null
+          faq?: Json | null
+          google_indexed?: boolean | null
+          google_indexed_at?: string | null
+          id?: string
+          key_takeaways?: string[] | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          published_at?: string | null
+          schema_markup?: Json | null
+          slug?: string
+          status?: string | null
+          target_prompt?: string | null
+          title?: string
+          topic_id?: string | null
+          updated_at?: string | null
+          word_count?: number | null
+        }
+        Relationships: []
+      }
       authors: {
         Row: {
           created_at: string
