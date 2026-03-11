@@ -5,34 +5,29 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const team = [
-  { name: "Edouard Brault", role: "Co-Fondateur", photo: "/lovable-uploads/photo-edouard-v2.png" },
-  { name: "Michaël Abramczuk", role: "Co-Fondateur", photo: "/lovable-uploads/photo-michael-v2.png" },
-  { name: "Germain", role: "Consultant GEO & Paid", photo: "/lovable-uploads/photo-germain-v2.png" },
-  { name: "Nathan", role: "Consultant GEO & Paid", photo: "/lovable-uploads/photo-nathan-v2.png" },
-  { name: "Nour", role: "Consultante GEO & Paid", photo: "/lovable-uploads/photo-nour-v2.png" },
-  { name: "Pauline", role: "Consultante GEO & Paid", photo: "/lovable-uploads/photo-pauline-v2.png" },
-  { name: "Eva", role: "Consultante GEO & Paid", photo: "/lovable-uploads/photo-eva-v2.png" },
+  { name: "Edouard Brault", role: "Co-Founder", photo: "/lovable-uploads/photo-edouard-v2.png" },
+  { name: "Michaël Abramczuk", role: "Co-Founder", photo: "/lovable-uploads/photo-michael-v2.png" },
+  { name: "Germain", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-germain-v2.png" },
+  { name: "Nathan", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-nathan-v2.png" },
+  { name: "Nour", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-nour-v2.png" },
+  { name: "Pauline", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-pauline-v2.png" },
+  { name: "Eva", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-eva-v2.png" },
   { name: "Léa", role: "Business Developer", photo: "/lovable-uploads/photo-lea-v2.png" },
   { name: "Hortense", role: "Lead Designer", photo: "/lovable-uploads/photo-hortense-v2.png" },
 ];
 
 const NotreEquipe = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
+  const autoScrollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isResettingRef = useRef(false);
 
-  // We render the team list 3 times to create a seamless loop.
-  // The "real" set is in the middle. When scroll drifts into the
-  // first or last clone set we silently jump back to the middle.
   const tripleTeam = [...team, ...team, ...team];
 
   const getOneSetWidth = useCallback(() => {
     if (!scrollRef.current) return 0;
-    // Each set has `team.length` cards. Total scrollWidth = 3 sets.
     return scrollRef.current.scrollWidth / 3;
   }, []);
 
-  // After mount, jump to the middle set so we can scroll both ways
   useEffect(() => {
     const el = scrollRef.current;
     if (el) {
@@ -41,7 +36,6 @@ const NotreEquipe = () => {
     }
   }, []);
 
-  // Seamless loop: when we scroll past a boundary, silently jump
   const handleScroll = useCallback(() => {
     if (isResettingRef.current) return;
     const el = scrollRef.current;
@@ -71,7 +65,6 @@ const NotreEquipe = () => {
     }
   };
 
-  // Auto-scroll
   useEffect(() => {
     const startAutoScroll = () => {
       autoScrollRef.current = setInterval(() => {
@@ -111,38 +104,32 @@ const NotreEquipe = () => {
   return (
     <section className="py-20 bg-white overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Badge */}
         <div className="flex justify-center mb-4">
           <span className="border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-full">
-            On se présente
+            Meet the Team
           </span>
         </div>
 
-        {/* Title */}
         <h2 className="font-jakarta text-4xl md:text-5xl font-bold mb-6 leading-tight">
           <span className="bg-gradient-to-r from-[#000000] to-[#001354] bg-clip-text text-transparent">
-            Notre équipe
+            Our Team
           </span>
         </h2>
 
-        {/* Description */}
         <p className="text-lg text-[#010D3E] mb-8 max-w-2xl mx-auto leading-relaxed font-inter">
-          Archipel est une agence dynamique composée de talents techniques, agiles, dynamiques et à l'écoute.
+          ArchipelaGrowth is a dynamic agency built by talented, agile, and attentive professionals.
         </p>
 
-        {/* CTA */}
         <div className="flex justify-center mb-14">
           <Button
             asChild
             className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-normal px-8 py-3 text-base rounded-lg font-inter"
           >
-            <Link to="/contact#contact-form">Contactez-nous</Link>
+            <Link to="/contact#contact-form">Contact Us</Link>
           </Button>
         </div>
 
-        {/* Team Slider */}
         <div className="relative">
-          {/* Gradient band - positioned behind cards, full-width */}
           <div
             className="hidden md:block absolute bottom-0 h-48 z-0 rounded-none"
             style={{
@@ -152,7 +139,6 @@ const NotreEquipe = () => {
             }}
           />
 
-          {/* Cards */}
           <div
             ref={scrollRef}
             className="flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory relative z-10 pb-20 md:pb-24 px-[calc((100%-280px)/2)] md:px-0"
@@ -161,7 +147,6 @@ const NotreEquipe = () => {
             {tripleTeam.map((member, index) => (
               <div key={index} className="flex-shrink-0 w-[280px] md:w-[300px] snap-start">
                 <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 p-6 text-center">
-                  {/* Photo */}
                   <div className="flex justify-center mb-4 overflow-hidden rounded-full">
                     {member.photo ? (
                       <img
@@ -174,39 +159,32 @@ const NotreEquipe = () => {
                       <div className="w-full aspect-square bg-[#f0f0f0]" />
                     )}
                   </div>
-                  {/* Name & role */}
                   <div className="p-2">
-                    <h3 className="font-jakarta font-bold text-[#010D3E] text-lg">
-                      {member.name}
-                    </h3>
-                    <p className="text-sm text-gray-500 font-inter">
-                      {member.role}
-                    </p>
+                    <h3 className="font-jakarta font-bold text-[#010D3E] text-lg">{member.name}</h3>
+                    <p className="text-sm text-gray-500 font-inter">{member.role}</p>
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Nav arrows - on the gradient band for desktop, near edges */}
           <div className="hidden md:flex absolute bottom-4 z-20 justify-center gap-8 left-0 right-0">
             <button
               onClick={() => scroll("left")}
               className="w-12 h-12 rounded-full text-[#0043F0] hover:border-2 hover:border-[#0043F0] flex items-center justify-center transition-all"
-              aria-label="Précédent"
+              aria-label="Previous"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <button
               onClick={() => scroll("right")}
               className="w-12 h-12 rounded-full border-2 border-[#0043F0] text-[#0043F0] hover:bg-[#0043F0] hover:text-white flex items-center justify-center transition-all"
-              aria-label="Suivant"
+              aria-label="Next"
             >
               <ArrowRight className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Mobile: gradient band behind cards, full-width */}
           <div
             className="md:hidden absolute bottom-0 h-40 z-0 rounded-none"
             style={{
@@ -216,19 +194,18 @@ const NotreEquipe = () => {
             }}
           />
 
-          {/* Mobile nav arrows */}
           <div className="flex md:hidden absolute bottom-2 left-0 right-0 z-20 justify-center gap-8">
             <button
               onClick={() => scroll("left")}
               className="w-12 h-12 rounded-full text-[#0043F0] flex items-center justify-center transition-all"
-              aria-label="Précédent"
+              aria-label="Previous"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <button
               onClick={() => scroll("right")}
               className="w-12 h-12 rounded-full border-2 border-[#0043F0] text-[#0043F0] hover:bg-[#0043F0] hover:text-white flex items-center justify-center transition-all"
-              aria-label="Suivant"
+              aria-label="Next"
             >
               <ArrowRight className="w-5 h-5" />
             </button>

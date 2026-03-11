@@ -24,7 +24,7 @@ const InteractiveVisualFocus = () => {
     }}>
       <div className="absolute inset-0 flex flex-col items-center justify-center px-6 md:px-8">
         <h2 className="font-jakarta text-3xl md:text-5xl lg:text-6xl font-bold text-[#0043F1] text-center mb-6 md:mb-10 leading-tight">
-          Devenez n°1 sur
+          Become #1 on
         </h2>
         
         <div className="relative w-72 h-20 md:w-[500px] md:h-36 lg:w-[600px] lg:h-44">

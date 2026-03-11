@@ -19,7 +19,7 @@ const SEOHelmet = ({
   title, 
   description, 
   canonicalUrl, 
-  ogImage = "https://archipelmarketing.com/og-image.png",
+  ogImage = "https://archipelagrowth.com/og-image.png",
   ogType = "website",
   keywords,
   structuredData,
@@ -46,10 +46,9 @@ const SEOHelmet = ({
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:locale" content="fr_FR" />
-        <meta property="og:site_name" content="Archipel - Agence GEO" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:site_name" content="ArchipelaGrowth - GEO Agency" />
         
-        {/* Article specific meta tags */}
         {author && <meta name="author" content={author} />}
         {publishedTime && <meta property="article:published_time" content={publishedTime} />}
         {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
@@ -65,7 +64,6 @@ const SEOHelmet = ({
         <meta name="twitter:image" content={ogImage} />
         {author && <meta name="twitter:creator" content={`@${author.replace(/\s+/g, '')}`} />}
         
-        {/* Structured Data */}
         {structuredData && (
           <script type="application/ld+json">
             {JSON.stringify(structuredData)}

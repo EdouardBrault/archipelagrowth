@@ -42,10 +42,10 @@ Allow: /
 
 User-agent: *
 Allow: /
-Disallow: /archipel-dashboard/
+Disallow: /admin-dashboard/
 Allow: /assets/
 Allow: /*.css$
 Allow: /*.js$
 Crawl-delay: 1
 
-Sitemap: https://archipelmarketing.com/sitemap.xml
+Sitemap: https://archipelagrowth.com/sitemap.xml

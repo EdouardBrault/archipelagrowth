@@ -34,44 +34,56 @@ const App = () => (
       <Sonner />
       <Routes>
         <Route path="/" element={<Index />} />
-        <Route path="/agence-geo-archipel" element={<ArchipelService />} />
-        <Route path="/agence-google-ads-archipel" element={<ArchipelServiceGeneric serviceKey="google-ads" />} />
-        <Route path="/agence-linkedin-ads-archipel" element={<ArchipelServiceGeneric serviceKey="linkedin-ads" />} />
-        <Route path="/agence-meta-ads-archipel" element={<ArchipelServiceGeneric serviceKey="meta-ads" />} />
-        <Route path="/agence-seo-archipel" element={<ArchipelServiceGeneric serviceKey="seo" />} />
-        <Route path="/agence-landing-page" element={<ArchipelServiceGeneric serviceKey="landing-page" />} />
-        <Route path="/simulateur-audit-GEO" element={<SimulateurAuditGeo />} />
-        <Route path="/simulateur-audit-geo-en" element={<SimulateurAuditGeoEn />} />
-        <Route path="/agence-marketing-digital-france" element={<AgenceMarketingDigitalFrance />} />
+        {/* New English routes */}
+        <Route path="/geo-services" element={<ArchipelService />} />
+        <Route path="/google-ads" element={<ArchipelServiceGeneric serviceKey="google-ads" />} />
+        <Route path="/linkedin-ads" element={<ArchipelServiceGeneric serviceKey="linkedin-ads" />} />
+        <Route path="/meta-ads" element={<ArchipelServiceGeneric serviceKey="meta-ads" />} />
+        <Route path="/seo-services" element={<ArchipelServiceGeneric serviceKey="seo" />} />
+        <Route path="/landing-pages" element={<ArchipelServiceGeneric serviceKey="landing-page" />} />
+        <Route path="/geo-audit" element={<SimulateurAuditGeo />} />
+        <Route path="/geo-audit-en" element={<SimulateurAuditGeoEn />} />
         <Route path="/contact" element={<ArchipelContact />} />
-        <Route path="/qui-sommes-nous" element={<ArchipelAPropos />} />
-        <Route path="/archipel-nos-references" element={<ArchipelNosReferences />} />
-        <Route path="/:clientSlug" element={<ArchipelReferenceDetail />} />
+        <Route path="/about" element={<ArchipelAPropos />} />
+        <Route path="/references" element={<ArchipelNosReferences />} />
         <Route path="/blog" element={<ArchipelBlog />} />
-        <Route path="/archipel-articles" element={<ArchipelArticle />} />
         <Route path="/blog/:slug" element={<ArchipelArticleDetail />} />
-        <Route path="/mentions-legales" element={<MentionsLegales />} />
-        <Route path="/politique-confidentialite" element={<PolitiqueConfidentialite />} />
-        <Route path="/cgu" element={<CGU />} />
-        <Route path="/archipel-login" element={<Navigate to="/archipel-dashboard" replace />} />
-        <Route path="/archipel-dashboard" element={<AdminAuth><AdminDashboard /></AdminAuth>} />
-        <Route path="/archipel-dashboard/create-article" element={<AdminAuth><CreateArticleForm /></AdminAuth>} />
-        <Route path="/archipel-dashboard/edit-article/:id" element={<AdminAuth><EditArticleForm /></AdminAuth>} />
-        {/* Old site redirections */}
+        <Route path="/legal-notice" element={<MentionsLegales />} />
+        <Route path="/privacy-policy" element={<PolitiqueConfidentialite />} />
+        <Route path="/terms" element={<CGU />} />
+        {/* Admin routes */}
+        <Route path="/admin-login" element={<Navigate to="/admin-dashboard" replace />} />
+        <Route path="/admin-dashboard" element={<AdminAuth><AdminDashboard /></AdminAuth>} />
+        <Route path="/admin-dashboard/create-article" element={<AdminAuth><CreateArticleForm /></AdminAuth>} />
+        <Route path="/admin-dashboard/edit-article/:id" element={<AdminAuth><EditArticleForm /></AdminAuth>} />
+        {/* Reference detail */}
+        <Route path="/:clientSlug" element={<ArchipelReferenceDetail />} />
+        {/* Old French route redirects */}
+        <Route path="/agence-geo-archipel" element={<Navigate to="/geo-services" replace />} />
+        <Route path="/agence-google-ads-archipel" element={<Navigate to="/google-ads" replace />} />
+        <Route path="/agence-linkedin-ads-archipel" element={<Navigate to="/linkedin-ads" replace />} />
+        <Route path="/agence-meta-ads-archipel" element={<Navigate to="/meta-ads" replace />} />
+        <Route path="/agence-seo-archipel" element={<Navigate to="/seo-services" replace />} />
+        <Route path="/agence-landing-page" element={<Navigate to="/landing-pages" replace />} />
+        <Route path="/simulateur-audit-GEO" element={<Navigate to="/geo-audit" replace />} />
+        <Route path="/simulateur-audit-geo-en" element={<Navigate to="/geo-audit-en" replace />} />
+        <Route path="/qui-sommes-nous" element={<Navigate to="/about" replace />} />
+        <Route path="/archipel-nos-references" element={<Navigate to="/references" replace />} />
+        <Route path="/mentions-legales" element={<Navigate to="/legal-notice" replace />} />
+        <Route path="/politique-confidentialite" element={<Navigate to="/privacy-policy" replace />} />
+        <Route path="/cgu" element={<Navigate to="/terms" replace />} />
         <Route path="/archipel-homepage" element={<Navigate to="/" replace />} />
         <Route path="/archipel-blog" element={<Navigate to="/blog" replace />} />
         <Route path="/archipel-contact" element={<Navigate to="/contact" replace />} />
-        <Route path="/archipel-a-propos" element={<Navigate to="/qui-sommes-nous" replace />} />
-        <Route path="/agencegeo" element={<Navigate to="/agence-geo-archipel" replace />} />
-        <Route path="/services-geo" element={<Navigate to="/agence-geo-archipel" replace />} />
+        <Route path="/archipel-a-propos" element={<Navigate to="/about" replace />} />
+        <Route path="/agencegeo" element={<Navigate to="/geo-services" replace />} />
+        <Route path="/services-geo" element={<Navigate to="/geo-services" replace />} />
         <Route path="/masterclass" element={<Navigate to="/" replace />} />
-        <Route path="/etude-chatgpt-vs-google" element={<Navigate to="/" replace />} />
-        <Route path="/simulateur-chatgpt" element={<Navigate to="/" replace />} />
-        <Route path="/references-wikipedia" element={<Navigate to="/" replace />} />
-        <Route path="/notre-equipe-geo" element={<Navigate to="/qui-sommes-nous#notre-equipe" replace />} />
-        <Route path="/methodologie-agence-geo" element={<Navigate to="/agence-geo-archipel" replace />} />
-        <Route path="/temoignages-clients-geo" element={<Navigate to="/archipel-nos-references" replace />} />
-        <Route path="/faq-geo" element={<Navigate to="/agence-geo-archipel" replace />} />
+        <Route path="/archipel-login" element={<Navigate to="/admin-dashboard" replace />} />
+        <Route path="/archipel-dashboard" element={<Navigate to="/admin-dashboard" replace />} />
+        <Route path="/archipel-dashboard/create-article" element={<Navigate to="/admin-dashboard/create-article" replace />} />
+        <Route path="/agence-marketing-digital-france" element={<Navigate to="/" replace />} />
+        <Route path="/archipel-articles" element={<Navigate to="/blog" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </TooltipProvider>
