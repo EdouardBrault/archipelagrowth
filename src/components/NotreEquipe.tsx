@@ -5,15 +5,15 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const team = [
-  { name: "Edouard Brault", role: "Co-Founder", photo: "/lovable-uploads/photo-edouard-v2.png" },
+  { name: "Edward Brault", role: "Co-Founder", photo: "/lovable-uploads/photo-edouard-v2.png" },
   { name: "Michaël Abramczuk", role: "Co-Founder", photo: "/lovable-uploads/photo-michael-v2.png" },
-  { name: "Germain", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-germain-v2.png" },
+  { name: "Richard", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-germain-v2.png" },
   { name: "Nathan", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-nathan-v2.png" },
   { name: "Nour", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-nour-v2.png" },
-  { name: "Pauline", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-pauline-v2.png" },
+  { name: "Rachel", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-pauline-v2.png" },
   { name: "Eva", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-eva-v2.png" },
-  { name: "Léa", role: "Business Developer", photo: "/lovable-uploads/photo-lea-v2.png" },
-  { name: "Hortense", role: "Lead Designer", photo: "/lovable-uploads/photo-hortense-v2.png" },
+  { name: "Leah", role: "Business Developer", photo: "/lovable-uploads/photo-lea-v2.png" },
+  { name: "Ashley", role: "Lead Designer", photo: "/lovable-uploads/photo-hortense-v2.png" },
 ];
 
 const NotreEquipe = () => {
