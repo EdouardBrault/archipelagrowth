@@ -19,15 +19,15 @@ const TAG_STYLES: Record<string, string> = {
 };
 
 const AUTHOR_PHOTOS: Record<string, string> = {
-  "Edouard Music": "/lovable-uploads/photo-edouard-new.png",
-  "Eva": "/lovable-uploads/photo-eva-new.png",
-  "Germain": "/lovable-uploads/photo-germain-new.png",
-  "Hortense": "/lovable-uploads/photo-hortense-new.png",
-  "Léa": "/lovable-uploads/photo-lea-new.png",
-  "Michael": "/lovable-uploads/photo-michael-new.png",
-  "Nathan": "/lovable-uploads/photo-nathan-new.png",
-  "Nour": "/lovable-uploads/photo-nour-new.png",
-  "Pauline": "/lovable-uploads/photo-pauline-new.png",
+  "James Carter": "/lovable-uploads/photo-edouard-new.png",
+  "Megan Reed": "/lovable-uploads/photo-eva-new.png",
+  "Tyler Brooks": "/lovable-uploads/photo-germain-new.png",
+  "Chloe Bennett": "/lovable-uploads/photo-hortense-new.png",
+  "Ashley Morgan": "/lovable-uploads/photo-lea-new.png",
+  "Ryan Mitchell": "/lovable-uploads/photo-michael-new.png",
+  "Brandon Hayes": "/lovable-uploads/photo-nathan-new.png",
+  "Aiden Ross": "/lovable-uploads/photo-nour-new.png",
+  "Lauren Scott": "/lovable-uploads/photo-pauline-new.png",
 };
 
 const getAuthorPhoto = (author: string): string | null => {
