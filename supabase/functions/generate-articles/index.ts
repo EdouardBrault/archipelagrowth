@@ -7,6 +7,7 @@ const corsHeaders = {
 };
 
 const FALLBACK_COMPETITOR_URLS = [
+  // GEO / AI Visibility
   'https://www.searchenginejournal.com/generative-engine-optimization/',
   'https://www.semrush.com/blog/geo-generative-engine-optimization/',
   'https://backlinko.com/generative-engine-optimization',
@@ -16,7 +17,42 @@ const FALLBACK_COMPETITOR_URLS = [
   'https://neilpatel.com/blog/generative-engine-optimization/',
   'https://www.brightedge.com/blog/generative-engine-optimization',
   'https://searchengineland.com/generative-engine-optimization-guide',
+  'https://agencyanalytics.com/blog/generative-engine-optimization',
+  // Agency Rankings
+  'https://clutch.co/seo-firms',
+  'https://www.g2.com/categories/seo-tools',
+  'https://www.forbes.com/advisor/business/best-seo-agencies/',
+  'https://www.techradar.com/best/best-seo-agencies',
+  'https://influencermarketinghub.com/geo-marketing-agencies/',
+  // ChatGPT / Perplexity Optimization
+  'https://www.searchenginejournal.com/chatgpt-seo/',
+  'https://backlinko.com/optimize-for-chatgpt',
+  'https://www.semrush.com/blog/chatgpt-search-optimization/',
+  'https://neilpatel.com/blog/chatgpt-seo/',
   'https://www.hubspot.com/marketing-statistics',
+  // AI Search
+  'https://www.searchenginejournal.com/ai-search-optimization/',
+  'https://searchengineland.com/ai-search-ranking-factors',
+  'https://www.conductor.com/academy/ai-search/',
+  'https://www.brightedge.com/blog/ai-search',
+  'https://moz.com/blog/ai-search-optimization',
+  // LLM Visibility
+  'https://www.semrush.com/blog/llm-optimization/',
+  'https://backlinko.com/llm-seo',
+  'https://ahrefs.com/blog/llm-optimization/',
+  'https://www.searchenginejournal.com/llm-visibility/',
+  'https://neilpatel.com/blog/llm-optimization/',
+  // GEO by City / Market
+  'https://clutch.co/seo-firms/new-york',
+  'https://clutch.co/seo-firms/san-francisco',
+  'https://clutch.co/seo-firms/los-angeles',
+  'https://clutch.co/seo-firms/chicago',
+  'https://clutch.co/seo-firms/austin',
+  'https://clutch.co/seo-firms/miami',
+  'https://clutch.co/seo-firms/boston',
+  'https://clutch.co/seo-firms/seattle',
+  'https://clutch.co/seo-firms/denver',
+  'https://clutch.co/seo-firms/atlanta',
 ];
 
 function jsonResponse(payload: unknown, status = 200) {
