@@ -606,12 +606,12 @@ const ArchipelServiceGeneric = ({ serviceKey }: Props) => {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="flex justify-center mb-6">
               <span className="border border-gray-300 text-gray-700 font-medium text-sm px-6 py-2.5 rounded-full">
-                {config.featuresIntro?.badge || "Activez votre croissance en ligne"}
+                {config.featuresIntro?.badge || "Activate Your Online Growth"}
               </span>
             </div>
             <h2 className="font-jakarta text-4xl md:text-5xl font-bold mb-6 leading-tight">
               <span className="bg-gradient-to-r from-[#000000] to-[#001354] bg-clip-text text-transparent">
-                {config.featuresIntro?.title || "Fonctionnalités"}
+                {config.featuresIntro?.title || "Features"}
               </span>
             </h2>
             <p className="text-lg text-[#010D3E] mb-10 max-w-2xl mx-auto leading-relaxed font-inter">
@@ -622,7 +622,7 @@ const ArchipelServiceGeneric = ({ serviceKey }: Props) => {
               size="lg"
               className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-normal font-inter rounded-lg px-8"
             >
-              <Link to="/contact#contact-form">{config.featuresIntro?.ctaLabel || `Votre score ${config.name}`}</Link>
+              <Link to="/contact#contact-form">{config.featuresIntro?.ctaLabel || `Your ${config.name} Score`}</Link>
             </Button>
           </div>
         </section>
