@@ -78,6 +78,20 @@ export default function AdminPipeline() {
     }
   };
 
+  const runIndexing = async () => {
+    setRunning(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("index-articles");
+      if (error) throw error;
+      toast({ title: "Indexing complete!", description: `Google: ${data.indexed_google}, Bing: ${data.indexed_bing}` });
+      fetchArticles();
+    } catch (err: any) {
+      toast({ title: "Indexing failed", description: err.message, variant: "destructive" });
+    } finally {
+      setRunning(false);
+    }
+  };
+
   const togglePublish = async (id: string, currentStatus: string | null) => {
     const newStatus = currentStatus === "published" ? "draft" : "published";
     const publishedAt = newStatus === "published" ? new Date().toISOString() : null;
