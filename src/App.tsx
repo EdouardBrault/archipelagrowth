@@ -22,6 +22,7 @@ import CGU from "./pages/CGU";
 import AgenceMarketingDigitalFrance from "./pages/AgenceMarketingDigitalFrance";
 import AdminAuth from "./components/Admin/AdminAuth";
 import AdminDashboard from "./components/Admin/AdminDashboard";
+import AdminPipeline from "./pages/AdminPipeline";
 import CreateArticleForm from "./components/CreateArticle/CreateArticleForm";
 import EditArticleForm from "./components/EditArticle/EditArticleForm";
 
@@ -56,6 +57,7 @@ const App = () => (
         <Route path="/admin-dashboard" element={<AdminAuth><AdminDashboard /></AdminAuth>} />
         <Route path="/admin-dashboard/create-article" element={<AdminAuth><CreateArticleForm /></AdminAuth>} />
         <Route path="/admin-dashboard/edit-article/:id" element={<AdminAuth><EditArticleForm /></AdminAuth>} />
+        <Route path="/admin-pipeline" element={<AdminAuth><AdminPipeline /></AdminAuth>} />
         {/* Reference detail */}
         <Route path="/:clientSlug" element={<ArchipelReferenceDetail />} />
         {/* Old French route redirects */}

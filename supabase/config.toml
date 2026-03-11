@@ -1,1 +1,10 @@
 project_id = "urvbwjlasifeupmchipv"
+
+[functions.generate-articles]
+verify_jwt = false
+
+[functions.index-articles]
+verify_jwt = false
+
+[functions.run-daily-pipeline]
+verify_jwt = false
