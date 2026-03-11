@@ -19,7 +19,7 @@ const PolitiqueConfidentialite = () => {
               <h2 className="font-jakarta text-2xl font-bold text-[#010D3E] mb-4">Data Controller</h2>
               <div className="font-inter text-[#010D3E]/80 text-sm leading-relaxed space-y-2">
                 <p>ArchipelaGrowth</p>
-                <p>350 Fifth Avenue, New York, NY 10118, United States</p>
+                <p>60 E 42nd St #4600, New York, NY 10165, United States</p>
                 <p>Contact: edouard@archipelmarketing.com</p>
               </div>
             </div>

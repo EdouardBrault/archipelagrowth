@@ -42,10 +42,10 @@ const ContactSection = () => {
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="ArchipelaGrowth - 350 Fifth Avenue, New York"
+              title="ArchipelaGrowth - 60 E 42nd St #4600, New York"
             />
             <div className="p-4 bg-white">
-              <p className="font-inter text-sm text-[#010D3E] font-medium">350 Fifth Avenue, New York, NY 10118</p>
+              <p className="font-inter text-sm text-[#010D3E] font-medium">60 E 42nd St #4600, New York, NY 10165</p>
             </div>
           </div>
 
