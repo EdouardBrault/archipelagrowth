@@ -120,9 +120,13 @@ export default function AdminPipeline() {
             <RefreshCw className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`} />
             Refresh
           </Button>
+          <Button onClick={runIndexing} disabled={running} variant="outline">
+            <Globe className="w-4 h-4 mr-2" />
+            Index Now
+          </Button>
           <Button onClick={runPipeline} disabled={running} className="bg-primary text-primary-foreground">
             {running ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Play className="w-4 h-4 mr-2" />}
-            {running ? "Running Pipeline..." : "Run Pipeline Now"}
+            {running ? "Running..." : "Run Pipeline Now"}
           </Button>
         </div>
       </div>
