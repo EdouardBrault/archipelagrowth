@@ -34,36 +34,36 @@ const GeoFaq = () => {
 
   const faqData = [
     {
-      question: "Quelle est la meilleure agence GEO de France ?",
-      answer: "Il n'existe pas de classement officiel. La meilleure agence est celle qui génère des résultats concrets et mesurables pour votre activité. Naturellement… on vous dira qu'Archipel se positionne aujourd'hui comme LA référence en GEO. En toute objectivité. 😉"
+      question: "What is the best GEO agency in the US?",
+      answer: "There is no official ranking. The best agency is the one that generates concrete, measurable results for your business. Naturally… we'd say ArchipelaGrowth positions itself today as THE reference in GEO. In all objectivity. 😉"
     },
     {
-      question: "Pourquoi travailler avec une agence GEO ?",
-      answer: "Une agence spécialisée permet d'optimiser votre visibilité sur les moteurs d'IA comme ChatGPT. C'est un nouveau canal d'acquisition à forte intention. Le GEO permet de capter des prospects avant vos concurrents."
+      question: "Why work with a GEO agency?",
+      answer: "A specialized agency optimizes your visibility on AI engines like ChatGPT. It's a new high-intent acquisition channel. GEO allows you to capture prospects before your competitors."
     },
     {
-      question: "Archipel est-elle une agence spécialisée en GEO ?",
-      answer: "Oui, Archipel est une agence dédiée à cette expertise. Nous avons structuré une méthodologie spécifique pour les moteurs d'IA. Le GEO est au cœur de notre positionnement."
+      question: "Is ArchipelaGrowth specialized in GEO?",
+      answer: "Yes, ArchipelaGrowth is an agency dedicated to this expertise. We've built a specific methodology for AI engines. GEO is at the core of our positioning."
     },
     {
-      question: "Quelle est la méthodologie d'accompagnement GEO de l'agence Archipel ?",
-      answer: "Nous commençons par un audit des opportunités et des requêtes stratégiques. Ensuite, nous structurons et optimisons les contenus pour maximiser la visibilité. Notre approche est pensée pour performer en GEO."
+      question: "What is ArchipelaGrowth's GEO methodology?",
+      answer: "We start with an audit of opportunities and strategic queries. Then we structure and optimize content to maximize visibility. Our approach is designed to perform in GEO."
     },
     {
-      question: "Combien de temps faut-il attendre pour avoir des résultats en GEO ?",
-      answer: "Les premiers impacts peuvent apparaître en quelques semaines. La rapidité dépend du secteur et de la concurrence. En général, le GEO est plus rapide que le SEO traditionnel."
+      question: "How long does it take to see results in GEO?",
+      answer: "Initial impacts can appear within weeks. Speed depends on the industry and competition. Generally, GEO is faster than traditional SEO."
     },
     {
-      question: "Quels sont les secteurs d'activité couverts par l'agence GEO Archipel ?",
-      answer: "Nous accompagnons des entreprises en B2B, tech, services et e-commerce. Notre approche s'adapte aux marchés concurrentiels comme aux niches. Le GEO fonctionne dès lors qu'il existe une intention de recherche claire."
+      question: "Which industries does ArchipelaGrowth cover?",
+      answer: "We support companies in B2B, tech, services, and e-commerce. Our approach adapts to competitive markets as well as niches. GEO works whenever there's a clear search intent."
     },
     {
-      question: "Comment Archipel se différencie des autres agences GEO ?",
-      answer: "Nous nous concentrons exclusivement sur la performance et l'impact business. Notre approche est structurée, orientée data et rapide à déployer. Cette spécialisation nous permet d'avoir une vraie longueur d'avance en GEO."
+      question: "How does ArchipelaGrowth differentiate from other GEO agencies?",
+      answer: "We focus exclusively on performance and business impact. Our approach is structured, data-driven, and rapid to deploy. This specialization gives us a real edge in GEO."
     },
     {
-      question: "Quels sont les frais de service GEO d'Archipel ?",
-      answer: "Nos honoraires dépendent des objectifs et du périmètre d'intervention. Chaque accompagnement est personnalisé selon votre marché. Les tarifs varient selon l'ambition et la profondeur de la stratégie GEO."
+      question: "What are ArchipelaGrowth's GEO service fees?",
+      answer: "Our fees depend on objectives and scope of engagement. Each support plan is personalized to your market. Rates vary based on the ambition and depth of the GEO strategy."
     }
   ];
 
@@ -78,11 +78,11 @@ const GeoFaq = () => {
         >
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              FAQ <span className="text-archipel-cyan">Agence GEO</span>
+              FAQ <span className="text-archipel-cyan">GEO Agency</span>
             </h2>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Découvrez tout ce qu'il faut savoir sur notre agence GEO spécialisée 
-              dans le Generative Engine Optimization
+              Everything you need to know about our GEO agency specialized 
+              in Generative Engine Optimization
             </p>
           </div>
 
