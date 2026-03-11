@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const team = [
-  { name: "Edward Brault", role: "Co-Founder", photo: "/lovable-uploads/photo-edouard-v2.png" },
-  { name: "Michaël Abramczuk", role: "Co-Founder", photo: "/lovable-uploads/photo-michael-v2.png" },
+  { name: "Edward", role: "Co-Founder", photo: "/lovable-uploads/photo-edouard-v2.png" },
+  { name: "Michaël", role: "Co-Founder", photo: "/lovable-uploads/photo-michael-v2.png" },
   { name: "Richard", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-germain-v2.png" },
   { name: "Nathan", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-nathan-v2.png" },
   { name: "Nour", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-nour-v2.png" },
