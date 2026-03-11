@@ -95,8 +95,8 @@ function parseJson(body: string, step: string) {
 
 function normalizeTargetCount(value: unknown) {
   const parsed = Number(value);
-  if (!Number.isFinite(parsed) || parsed <= 0) return 10;
-  return Math.min(Math.floor(parsed), 10);
+  if (!Number.isFinite(parsed) || parsed <= 0) return 40;
+  return Math.min(Math.floor(parsed), 50);
 }
 
 function extractPeecUrl(item: any): string | null {
