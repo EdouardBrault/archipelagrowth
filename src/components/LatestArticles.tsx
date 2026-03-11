@@ -2,20 +2,18 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useMergedArticles } from "@/hooks/useBlogArticles";
+import { usePipelineArticles } from "@/hooks/usePipelineArticles";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const TAG_STYLES: Record<string, string> = {
+  "GEO": "text-[#0043F1] border-[#0043F1]",
   "GEO Agency": "text-[#0043F1] border-[#0043F1]",
   "AI SEO Agency": "text-[#80FFE7] border-[#80FFE7]",
   "AIO Agency": "text-[#061941] border-[#061941]",
-  "Agence GEO": "text-[#0043F1] border-[#0043F1]",
-  "Agence SEO IA": "text-[#80FFE7] border-[#80FFE7]",
-  "Agence AIO": "text-[#061941] border-[#061941]",
 };
 
 const LatestArticles = () => {
-  const { articles, isLoading } = useMergedArticles();
+  const { articles, isLoading } = usePipelineArticles();
   const displayedArticles = articles.slice(0, 4);
 
   if (!isLoading && displayedArticles.length === 0) return null;
@@ -51,15 +49,14 @@ const LatestArticles = () => {
               ))
             : displayedArticles.map((article) => (
                 <Link key={article.slug} to={`/blog/${article.slug}`} className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300 block">
-                  <div className="aspect-[16/9] overflow-hidden">
-                    <img src={article.image} alt={article.title} className="w-full h-full object-cover" loading="lazy" />
-                  </div>
                   <div className="p-5">
-                    <span className={`px-3 py-1 text-xs font-inter font-medium rounded-full border bg-white inline-block mb-3 ${TAG_STYLES[article.category] || "text-[#0043F1] border-[#0043F1]"}`}>
-                      {article.category}
-                    </span>
+                    {article.category && (
+                      <span className={`px-3 py-1 text-xs font-inter font-medium rounded-full border bg-white inline-block mb-3 ${TAG_STYLES[article.category] || "text-[#0043F1] border-[#0043F1]"}`}>
+                        {article.category}
+                      </span>
+                    )}
                     <h3 className="font-jakarta font-bold text-[#010D3E] text-base mb-2 line-clamp-2">{article.title}</h3>
-                    <p className="font-inter text-sm text-[#010D3E]/60 mb-3 line-clamp-2">{article.description}</p>
+                    <p className="font-inter text-sm text-[#010D3E]/60 mb-3 line-clamp-2">{article.meta_description}</p>
                     <span className="font-inter text-sm font-medium text-[#0043F1] inline-flex items-center gap-1">
                       Read article <span>→</span>
                     </span>
