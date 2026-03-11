@@ -8,24 +8,24 @@ import featureScreenshot3 from "@/assets/feature-screenshot-3.png";
 const defaultFeatures: FeatureItem[] = [
   {
     number: "1",
-    title: "Fonctionnalité",
-    subtitle: "Souhaitez-vous connaître votre visibilité sur les principaux LLM du marché ?",
+    title: "Feature",
+    subtitle: "Want to know your visibility on the leading LLMs on the market?",
     description:
-      "Chez Archipel Marketing, nous proposons des audits de visibilité en GEO et vous livrons une roadmap actionnable pour influencer les LLM, gagner en visibilité et générer plus de leads.",
+      "At ArchipelaGrowth, we offer GEO visibility audits and deliver an actionable roadmap to influence LLMs, gain visibility, and generate more leads.",
   },
   {
     number: "2",
-    title: "Fonctionnalité",
-    subtitle: "Souhaitez-vous connaître votre visibilité sur les principaux LLM du marché ?",
+    title: "Feature",
+    subtitle: "Want to know your visibility on the leading LLMs on the market?",
     description:
-      "Chez Archipel Marketing, nous proposons des audits de visibilité en GEO et vous livrons une roadmap actionnable pour influencer les LLM, gagner en visibilité et générer plus de leads.",
+      "At ArchipelaGrowth, we offer GEO visibility audits and deliver an actionable roadmap to influence LLMs, gain visibility, and generate more leads.",
   },
   {
     number: "3",
-    title: "Fonctionnalité",
-    subtitle: "Souhaitez-vous connaître votre visibilité sur les principaux LLM du marché ?",
+    title: "Feature",
+    subtitle: "Want to know your visibility on the leading LLMs on the market?",
     description:
-      "Chez Archipel Marketing, nous proposons des audits de visibilité en GEO et vous livrons une roadmap actionnable pour influencer les LLM, gagner en visibilité et générer plus de leads.",
+      "At ArchipelaGrowth, we offer GEO visibility audits and deliver an actionable roadmap to influence LLMs, gain visibility, and generate more leads.",
   },
 ];
 
@@ -76,7 +76,7 @@ const ServiceFeatures = ({ features }: ServiceFeaturesProps) => {
                     to="/contact#contact-form"
                     className="text-[#0043F1] font-inter font-medium flex items-center gap-1.5 hover:gap-2.5 transition-all"
                   >
-                    Nous contacter
+                    Contact Us
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>

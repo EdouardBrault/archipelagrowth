@@ -639,7 +639,7 @@ const ArchipelServiceGeneric = ({ serviceKey }: Props) => {
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
               <div className="flex justify-center mb-6">
                 <span className="border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-full">
-                  {config.presentation.badge || "On se présente"}
+                  {config.presentation.badge || "About Us"}
                 </span>
               </div>
               <h2 className="font-jakarta text-4xl md:text-5xl font-bold mb-6 leading-tight">

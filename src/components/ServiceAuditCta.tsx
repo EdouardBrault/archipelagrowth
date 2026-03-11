@@ -15,11 +15,11 @@ interface ServiceAuditCtaProps {
 }
 
 const ServiceAuditCta = ({ config }: ServiceAuditCtaProps) => {
-  const badge = config?.badge || "Testez-vous";
-  const title = config?.title || "Envie de connaître votre score d'audit GEO ?";
-  const subtitle = config?.subtitle || "Envie de connaître votre score de visibilité sur ChatGPT ?";
-  const description = config?.description || "Chez Archipel Marketing, nous proposons des audits de visibilité en GEO et vous livrons une roadmap actionnable pour influencer les LLM, gagner en visibilité et générer plus de leads.";
-  const ctaLabel = config?.ctaLabel || "Demander un audit GEO";
+  const badge = config?.badge || "Test Yourself";
+  const title = config?.title || "Want to know your GEO Audit score?";
+  const subtitle = config?.subtitle || "Want to know your visibility score on ChatGPT?";
+  const description = config?.description || "At ArchipelaGrowth, we offer GEO visibility audits and deliver an actionable roadmap to influence LLMs, gain visibility, and generate more leads.";
+  const ctaLabel = config?.ctaLabel || "Request a GEO Audit";
 
   return (
     <section className="py-20 bg-white">
