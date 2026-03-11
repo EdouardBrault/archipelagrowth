@@ -8,6 +8,8 @@ import { ArrowLeft, ArrowRight, Plus, Clock, Calendar, ChevronRight } from "luci
 import { useState, useEffect, useRef, useMemo } from "react";
 import { usePipelineArticles, usePipelineArticleBySlug } from "@/hooks/usePipelineArticles";
 import { Skeleton } from "@/components/ui/skeleton";
+import ArticleBody from "@/components/BlogArticle/ArticleBody";
+import { extractHeadings } from "@/components/BlogArticle/ArticleBody";
 import DOMPurify from "dompurify";
 
 const TAG_STYLES: Record<string, string> = {
