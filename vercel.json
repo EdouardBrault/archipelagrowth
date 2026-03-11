@@ -1,0 +1,19 @@
+{
+  "installCommand": "npm install",
+  "buildCommand": "npm run build:client",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://retrrddqewpcvmnhywpy.supabase.co/functions/v1/sitemap"
+    },
+    {
+      "source": "/llms.txt",
+      "destination": "https://retrrddqewpcvmnhywpy.supabase.co/functions/v1/llms-txt"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
