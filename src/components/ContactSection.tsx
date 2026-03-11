@@ -60,8 +60,8 @@ const ContactSection = () => {
                   <CheckCircle className="w-4 h-4" />
                   Contact verified
                 </div>
-                <a href="mailto:hello@archipelagrowth.com" className="block font-inter text-sm text-[#010D3E] underline hover:text-[#0043F1] transition-colors">
-                  hello@archipelagrowth.com
+                <a href="mailto:edouard@archipelmarketing.com" className="block font-inter text-sm text-[#010D3E] underline hover:text-[#0043F1] transition-colors">
+                  edouard@archipelmarketing.com
                 </a>
                 <p className="mt-2">
                   <Link to="/contact#contact-form" className="font-inter text-sm text-[#010D3E] font-medium hover:text-[#0043F1] transition-colors">

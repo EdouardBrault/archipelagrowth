@@ -19,7 +19,7 @@ const MentionsLegales = () => {
               <dl className="space-y-4 font-inter text-[#010D3E]/80 text-sm leading-relaxed">
                 <div><dt className="font-semibold text-[#010D3E]">Company Name</dt><dd>ArchipelaGrowth</dd></div>
                 <div><dt className="font-semibold text-[#010D3E]">Address</dt><dd>350 Fifth Avenue<br />New York, NY 10118<br />United States</dd></div>
-                <div><dt className="font-semibold text-[#010D3E]">Contact</dt><dd>hello@archipelagrowth.com</dd></div>
+                <div><dt className="font-semibold text-[#010D3E]">Contact</dt><dd>edouard@archipelmarketing.com</dd></div>
               </dl>
             </div>
             <div>

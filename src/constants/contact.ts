@@ -1,6 +1,6 @@
 
 export const CONTACT_INFO = {
-  email: "hello@archipelagrowth.com",
+  email: "edouard@archipelmarketing.com",
   address: {
     street: "350 Fifth Avenue",
     city: "New York, NY 10118"
