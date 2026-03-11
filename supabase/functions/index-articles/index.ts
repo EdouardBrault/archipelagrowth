@@ -8,57 +8,36 @@ const corsHeaders = {
 
 const SITE_URL = 'https://archipelagrowth.com';
 
-async function submitToIndexNow(urls: string[], indexNowKey: string): Promise<{ success: boolean; count: number }> {
-  try {
-    const response = await fetch('https://api.indexnow.org/indexnow', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        host: 'archipelagrowth.com',
-        key: indexNowKey,
-        keyLocation: `${SITE_URL}/${indexNowKey}.txt`,
-        urlList: urls,
-      }),
-    });
-
-    const status = response.status;
-    await response.text(); // consume body
-    
-    // IndexNow returns 200 or 202 on success
-    if (status === 200 || status === 202) {
-      console.log(`✓ IndexNow: ${urls.length} URLs submitted successfully`);
-      return { success: true, count: urls.length };
-    } else {
-      console.error(`IndexNow error: status ${status}`);
-      return { success: false, count: 0 };
-    }
-  } catch (error) {
-    console.error('IndexNow submission error:', error);
-    return { success: false, count: 0 };
-  }
+function base64url(input: string): string {
+  return btoa(input).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-async function submitToGoogleIndexing(urls: string[], serviceAccountJson: string): Promise<{ success: boolean; count: number }> {
+function arrayBufferToBase64url(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  for (const b of bytes) binary += String.fromCharCode(b);
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function getGoogleAccessToken(serviceAccountJson: string): Promise<string | null> {
   try {
-    const serviceAccount = JSON.parse(serviceAccountJson);
-    
-    // Create JWT for Google API auth
-    const header = btoa(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
+    const sa = JSON.parse(serviceAccountJson);
+
+    const header = base64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
     const now = Math.floor(Date.now() / 1000);
-    const claimSet = btoa(JSON.stringify({
-      iss: serviceAccount.client_email,
+    const claimSet = base64url(JSON.stringify({
+      iss: sa.client_email,
       scope: 'https://www.googleapis.com/auth/indexing',
       aud: 'https://oauth2.googleapis.com/token',
       exp: now + 3600,
       iat: now,
     }));
 
-    // Import private key and sign JWT
-    const pemContent = serviceAccount.private_key
-      .replace(/-----BEGIN PRIVATE KEY-----/, '')
-      .replace(/-----END PRIVATE KEY-----/, '')
-      .replace(/\n/g, '');
-    
+    const pemContent = sa.private_key
+      .replace(/-----BEGIN PRIVATE KEY-----/g, '')
+      .replace(/-----END PRIVATE KEY-----/g, '')
+      .replace(/\s/g, '');
+
     const binaryKey = Uint8Array.from(atob(pemContent), c => c.charCodeAt(0));
     const cryptoKey = await crypto.subtle.importKey(
       'pkcs8',
@@ -70,50 +49,80 @@ async function submitToGoogleIndexing(urls: string[], serviceAccountJson: string
 
     const signatureInput = new TextEncoder().encode(`${header}.${claimSet}`);
     const signature = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', cryptoKey, signatureInput);
-    const jwt = `${header}.${claimSet}.${btoa(String.fromCharCode(...new Uint8Array(signature)))}`;
+    const jwt = `${header}.${claimSet}.${arrayBufferToBase64url(signature)}`;
 
-    // Exchange JWT for access token
     const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`,
+      body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`,
     });
-    
+
     const tokenData = await tokenRes.json();
     if (!tokenData.access_token) {
-      console.error('Google token error:', tokenData);
-      return { success: false, count: 0 };
+      console.error('Google token error:', JSON.stringify(tokenData));
+      return null;
     }
-
-    // Submit each URL to Google Indexing API
-    let indexed = 0;
-    for (const url of urls) {
-      try {
-        const res = await fetch('https://indexing.googleapis.com/v3/urlNotifications:publish', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${tokenData.access_token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ url, type: 'URL_UPDATED' }),
-        });
-        
-        if (res.ok) {
-          indexed++;
-          console.log(`✓ Google indexed: ${url}`);
-        } else {
-          const errBody = await res.text();
-          console.error(`Google indexing error for ${url}: ${errBody}`);
-        }
-      } catch (err) {
-        console.error(`Google indexing error for ${url}:`, err);
-      }
-    }
-
-    return { success: true, count: indexed };
+    console.log('✓ Google access token obtained');
+    return tokenData.access_token;
   } catch (error) {
-    console.error('Google Indexing setup error:', error);
-    return { success: false, count: 0 };
+    console.error('Google auth error:', error);
+    return null;
+  }
+}
+
+async function submitToGoogle(urls: string[], accessToken: string): Promise<number> {
+  let indexed = 0;
+  for (const url of urls) {
+    try {
+      const res = await fetch('https://indexing.googleapis.com/v3/urlNotifications:publish', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url, type: 'URL_UPDATED' }),
+      });
+
+      if (res.ok) {
+        indexed++;
+        console.log(`✓ Google indexed: ${url}`);
+      } else {
+        const errBody = await res.text();
+        console.error(`✗ Google error for ${url}: ${res.status} ${errBody}`);
+      }
+    } catch (err) {
+      console.error(`✗ Google error for ${url}:`, err);
+    }
+  }
+  return indexed;
+}
+
+async function submitToBing(urls: string[], indexNowKey: string): Promise<number> {
+  try {
+    const response = await fetch('https://www.bing.com/indexnow', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({
+        host: 'archipelagrowth.com',
+        key: indexNowKey,
+        keyLocation: `${SITE_URL}/${indexNowKey}.txt`,
+        urlList: urls,
+      }),
+    });
+
+    const status = response.status;
+    await response.text();
+
+    if (status === 200 || status === 202) {
+      console.log(`✓ Bing IndexNow: ${urls.length} URLs submitted (status ${status})`);
+      return urls.length;
+    } else {
+      console.error(`✗ Bing IndexNow error: status ${status}`);
+      return 0;
+    }
+  } catch (error) {
+    console.error('Bing IndexNow error:', error);
+    return 0;
   }
 }
 
@@ -126,12 +135,18 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const indexNowKey = Deno.env.get('INDEXNOW_KEY');
-    const bingKey = Deno.env.get('BING_WEBMASTER_API_KEY');
     const googleServiceAccount = Deno.env.get('GOOGLE_SERVICE_ACCOUNT_JSON');
+
+    if (!indexNowKey && !googleServiceAccount) {
+      return new Response(
+        JSON.stringify({ error: 'Missing both INDEXNOW_KEY and GOOGLE_SERVICE_ACCOUNT_JSON secrets' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Fetch unindexed articles
+    // Fetch unindexed published articles
     const { data: articles, error } = await supabase
       .from('articles')
       .select('id, slug, google_indexed, bing_indexed')
@@ -149,26 +164,24 @@ serve(async (req) => {
 
     console.log(`Found ${articles.length} articles to index`);
 
-    // Prepare URLs
-    const bingUrls = articles.filter(a => !a.bing_indexed).map(a => `${SITE_URL}/blog/${a.slug}`);
-    const googleUrls = articles.filter(a => !a.google_indexed).map(a => `${SITE_URL}/blog/${a.slug}`);
+    const bingArticles = articles.filter(a => !a.bing_indexed);
+    const googleArticles = articles.filter(a => !a.google_indexed);
+    const bingUrls = bingArticles.map(a => `${SITE_URL}/blog/${a.slug}`);
+    const googleUrls = googleArticles.map(a => `${SITE_URL}/blog/${a.slug}`);
 
-    let bingResult = { success: false, count: 0 };
-    let googleResult = { success: false, count: 0 };
+    let bingCount = 0;
+    let googleCount = 0;
 
-    // Submit to Bing/IndexNow
+    // Bing IndexNow
     if (bingUrls.length > 0 && indexNowKey) {
-      bingResult = await submitToIndexNow(bingUrls, indexNowKey);
-      
-      if (bingResult.success) {
-        const bingIds = articles.filter(a => !a.bing_indexed).map(a => a.id);
-        for (const id of bingIds) {
+      bingCount = await submitToBing(bingUrls, indexNowKey);
+      if (bingCount > 0) {
+        for (const article of bingArticles) {
           await supabase.from('articles').update({
             bing_indexed: true,
             bing_indexed_at: new Date().toISOString(),
-          }).eq('id', id);
+          }).eq('id', article.id);
         }
-
         // Log submission
         await supabase.from('bing_url_submissions').insert({
           site_url: SITE_URL,
@@ -179,17 +192,20 @@ serve(async (req) => {
       }
     }
 
-    // Submit to Google
+    // Google Indexing
     if (googleUrls.length > 0 && googleServiceAccount) {
-      googleResult = await submitToGoogleIndexing(googleUrls, googleServiceAccount);
-
-      if (googleResult.success && googleResult.count > 0) {
-        const googleIds = articles.filter(a => !a.google_indexed).map(a => a.id);
-        for (const id of googleIds) {
-          await supabase.from('articles').update({
-            google_indexed: true,
-            google_indexed_at: new Date().toISOString(),
-          }).eq('id', id);
+      const accessToken = await getGoogleAccessToken(googleServiceAccount);
+      if (accessToken) {
+        googleCount = await submitToGoogle(googleUrls, accessToken);
+        if (googleCount > 0) {
+          // Only mark articles that were actually indexed
+          const indexedArticles = googleArticles.slice(0, googleCount);
+          for (const article of indexedArticles) {
+            await supabase.from('articles').update({
+              google_indexed: true,
+              google_indexed_at: new Date().toISOString(),
+            }).eq('id', article.id);
+          }
         }
       }
     }
@@ -197,8 +213,8 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: true,
-        indexed_bing: bingResult.count,
-        indexed_google: googleResult.count,
+        indexed_bing: bingCount,
+        indexed_google: googleCount,
         total_processed: articles.length,
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

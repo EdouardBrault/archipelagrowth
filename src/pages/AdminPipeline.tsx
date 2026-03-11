@@ -78,6 +78,20 @@ export default function AdminPipeline() {
     }
   };
 
+  const runIndexing = async () => {
+    setRunning(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("index-articles");
+      if (error) throw error;
+      toast({ title: "Indexing complete!", description: `Google: ${data.indexed_google}, Bing: ${data.indexed_bing}` });
+      fetchArticles();
+    } catch (err: any) {
+      toast({ title: "Indexing failed", description: err.message, variant: "destructive" });
+    } finally {
+      setRunning(false);
+    }
+  };
+
   const togglePublish = async (id: string, currentStatus: string | null) => {
     const newStatus = currentStatus === "published" ? "draft" : "published";
     const publishedAt = newStatus === "published" ? new Date().toISOString() : null;
@@ -106,9 +120,13 @@ export default function AdminPipeline() {
             <RefreshCw className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`} />
             Refresh
           </Button>
+          <Button onClick={runIndexing} disabled={running} variant="outline">
+            <Globe className="w-4 h-4 mr-2" />
+            Index Now
+          </Button>
           <Button onClick={runPipeline} disabled={running} className="bg-primary text-primary-foreground">
             {running ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Play className="w-4 h-4 mr-2" />}
-            {running ? "Running Pipeline..." : "Run Pipeline Now"}
+            {running ? "Running..." : "Run Pipeline Now"}
           </Button>
         </div>
       </div>
