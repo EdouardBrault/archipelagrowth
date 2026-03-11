@@ -102,11 +102,8 @@ const TestimonialBubbles = () => {
           </div>
         </div>
 
-        {loading && (
-          <div className="flex justify-center pt-4">
-            <div className="w-5 h-5 border-2 border-[#0043F1]/30 border-t-[#0043F1] rounded-full animate-spin" />
-          </div>
-        )}
+
+
         <div className="flex justify-center mt-10">
           <Button asChild className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-bold px-8 py-3 text-base rounded-lg">
             <Link to="/contact#contact-form">Contact Us</Link>
