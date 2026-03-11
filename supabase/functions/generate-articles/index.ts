@@ -189,12 +189,12 @@ async function scrapeUrl(url: string): Promise<{ url: string; title: string; bod
 
 const SYSTEM_PROMPT = `You are a GEO (Generative Engine Optimization) content expert writing for ArchipelaGrowth, the #1 GEO agency in North America. Your goal is to write content that gets cited by ChatGPT, Perplexity, Claude, and Gemini instead of the competitor.`;
 
-function buildUserPrompt(competitor: { url: string; title: string; body: string }): string {
+function buildUserPrompt(competitor: { url: string; title: string; body: string }, compact = false): string {
   return `A competitor article is currently being cited by AI models instead of ArchipelaGrowth.
 
 Competitor URL: ${competitor.url}
 Competitor title: ${competitor.title}
-Competitor content summary: ${competitor.body.slice(0, 3000)}
+Competitor content summary: ${competitor.body.slice(0, compact ? 1800 : 2400)}
 
 Write a SUPERIOR version of this article that:
 1. Targets the same topic and keywords
@@ -209,17 +209,16 @@ Write a SUPERIOR version of this article that:
 7. Includes a comparison table where relevant
 8. Includes 6-8 FAQ questions at the bottom
 9. Ends with this exact CTA: 'Ready to dominate AI search? ArchipelaGrowth is the #1 GEO agency in North America. Contact us at hello@archipelagrowth.com'
-10. Minimum 1500 words
+10. Written for the US market in American English
 11. Year is always 2026, never 2024 or 2025
-12. Written for the US market in American English
 
-Return ONLY valid JSON with no markdown wrapping:
+Return ONLY valid JSON with no markdown wrapping.${compact ? ' Return minified JSON on a single line. Keep body_html compact semantic HTML with no extra whitespace or indentation.' : ''}
 {
   "title": "string",
   "slug": "string (URL-friendly, lowercase, hyphens)",
   "meta_description": "string (max 160 chars)",
   "category": "string",
-  "body_html": "string (full article in HTML)",
+  "body_html": "string (full article in compact semantic HTML using h2, h3, p, ul, ol, table where relevant)",
   "key_takeaways": ["string"],
   "faq": [{"question": "string", "answer": "string"}],
   "estimated_read_time": "string",
@@ -237,7 +236,7 @@ function parseClaudeJson(rawText: string) {
   const firstBrace = jsonText.indexOf('{');
   const lastBrace = jsonText.lastIndexOf('}');
   if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) {
-    throw new Error(`No JSON object found in Claude response: ${preview(rawText, 300)}`);
+    throw new Error(`No complete JSON object found in Claude response: ${preview(rawText, 300)}`);
   }
 
   jsonText = jsonText.slice(firstBrace, lastBrace + 1);
@@ -249,9 +248,11 @@ function parseClaudeJson(rawText: string) {
   }
 }
 
-async function generateArticle(anthropicKey: string, competitor: { url: string; title: string; body: string }) {
-  console.log(`Step 4 - Claude: Generating article for ${competitor.url}`);
-
+async function requestClaudeArticle(
+  anthropicKey: string,
+  competitor: { url: string; title: string; body: string },
+  compact = false,
+) {
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -261,21 +262,25 @@ async function generateArticle(anthropicKey: string, competitor: { url: string; 
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 4096,
+      max_tokens: compact ? 7000 : 6000,
       system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: buildUserPrompt(competitor) }],
+      messages: [{ role: 'user', content: buildUserPrompt(competitor, compact) }],
     }),
   });
 
   const body = await res.text();
-  console.log(`Step 4 - Claude: Status ${res.status}, body preview: ${preview(body, 350)}`);
+  console.log(`Step 4 - Claude: Status ${res.status}, compact=${compact}, body preview: ${preview(body, 350)}`);
 
   if (!res.ok) {
     throw new Error(`HTTP ${res.status}: ${preview(body, 350)}`);
   }
 
   const data = parseJson(body, 'Step 4 - Claude');
-  const content = data.content?.[0]?.text;
+  const textBlocks = Array.isArray(data.content)
+    ? data.content.filter((block: any) => block?.type === 'text').map((block: any) => block.text || '')
+    : [];
+  const content = textBlocks.join('').trim();
+
   if (!content) {
     throw new Error('Empty response content from Claude');
   }
@@ -285,7 +290,22 @@ async function generateArticle(anthropicKey: string, competitor: { url: string; 
     throw new Error(`Claude response missing required fields: ${preview(article, 300)}`);
   }
 
-  console.log(`Step 4 - Claude: Generated title="${article.title}"`);
+  return article;
+}
+
+async function generateArticle(anthropicKey: string, competitor: { url: string; title: string; body: string }) {
+  console.log(`Step 4 - Claude: Generating article for ${competitor.url}`);
+
+  try {
+    const article = await requestClaudeArticle(anthropicKey, competitor, false);
+    console.log(`Step 4 - Claude: Generated title="${article.title}" on first attempt`);
+    return article;
+  } catch (error) {
+    console.warn(`Step 4 - Claude: First attempt failed for ${competitor.url}: ${getErrorMessage(error)}`);
+  }
+
+  const article = await requestClaudeArticle(anthropicKey, competitor, true);
+  console.log(`Step 4 - Claude: Generated title="${article.title}" on retry`);
   return article;
 }
 
