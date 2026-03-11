@@ -24,13 +24,13 @@ const ContactSection = lazy(() => import("@/components/ContactSection"));
 
 const Index = () => {
   const location = useLocation();
-  const canonicalUrl = location.pathname === "/" || location.pathname === "/agencegeo" || location.pathname === "/archipel-homepage" ? "https://archipelmarketing.com/" : undefined;
+  const canonicalUrl = "https://archipelagrowth.com/";
 
   return (
     <>
       <SEOHelmet
-        title="AI Optimization & GEO - Agence #1 France | Archipel Marketing"
-        description="Agence spécialisée en Generative Engine Optimization (GEO) et visibilité sur l'IA. Devenez la référence de votre secteur sur ChatGPT, Perplexity et Claude."
+        title="AI Optimization & GEO - #1 Agency in the US | ArchipelaGrowth"
+        description="Agency specialized in Generative Engine Optimization (GEO) and AI visibility. Become the reference in your industry on ChatGPT, Perplexity, and Claude."
         canonicalUrl={canonicalUrl}
       />
       <StructuredData type="organization" />
@@ -42,8 +42,6 @@ const Index = () => {
         <NotreEquipe />
         <NosChiffres />
         <Suspense fallback={<div className="min-h-[200px]" />}>
-          {/* VideoTestimonials hidden until video is ready */}
-          {/* <VideoTestimonials /> */}
           <TestimonialBubbles />
           <Partenariats />
           <Methodologie />
