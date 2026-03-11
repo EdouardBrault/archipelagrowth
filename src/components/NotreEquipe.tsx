@@ -5,15 +5,15 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const team = [
-  { name: "Edouard Brault", role: "Co-Founder", photo: "/lovable-uploads/photo-edouard-v2.png" },
-  { name: "Michaël Abramczuk", role: "Co-Founder", photo: "/lovable-uploads/photo-michael-v2.png" },
-  { name: "Germain", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-germain-v2.png" },
-  { name: "Nathan", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-nathan-v2.png" },
-  { name: "Nour", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-nour-v2.png" },
-  { name: "Pauline", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-pauline-v2.png" },
-  { name: "Eva", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-eva-v2.png" },
-  { name: "Léa", role: "Business Developer", photo: "/lovable-uploads/photo-lea-v2.png" },
-  { name: "Hortense", role: "Lead Designer", photo: "/lovable-uploads/photo-hortense-v2.png" },
+  { name: "James Carter", role: "Co-Founder", photo: "/lovable-uploads/photo-edouard-v2.png" },
+  { name: "Ryan Mitchell", role: "Co-Founder", photo: "/lovable-uploads/photo-michael-v2.png" },
+  { name: "Tyler Brooks", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-germain-v2.png" },
+  { name: "Brandon Hayes", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-nathan-v2.png" },
+  { name: "Aiden Ross", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-nour-v2.png" },
+  { name: "Lauren Scott", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-pauline-v2.png" },
+  { name: "Megan Reed", role: "GEO & Paid Consultant", photo: "/lovable-uploads/photo-eva-v2.png" },
+  { name: "Ashley Morgan", role: "Business Developer", photo: "/lovable-uploads/photo-lea-v2.png" },
+  { name: "Chloe Bennett", role: "Lead Designer", photo: "/lovable-uploads/photo-hortense-v2.png" },
 ];
 
 const NotreEquipe = () => {
