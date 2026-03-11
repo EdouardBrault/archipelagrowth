@@ -22,13 +22,12 @@ interface GoogleReviewsData {
   reviews: GoogleReview[];
 }
 
-// Fallback reviews in case API fails
 const fallbackReviews: GoogleReview[] = [
-  { text: "Avec Archipel, j'ai doublé ma volumétrie de leads à budget équivalent en 2 mois.", authorName: "Nicolas R.", authorPhoto: null, profileUrl: null, rating: 5, relativeTime: "il y a 2 mois" },
-  { text: "Grâce au travail d'Archipel, on a signé plusieurs leads venant du GEO !", authorName: "Elodie M.", authorPhoto: null, profileUrl: null, rating: 5, relativeTime: "il y a 3 mois" },
-  { text: "On est passé n°1 sur ChatGPT sur +100 prompts en 1 mois. Impressionnant.", authorName: "Claire D.", authorPhoto: null, profileUrl: null, rating: 5, relativeTime: "il y a 1 mois" },
-  { text: "J'ai tenté de faire du GEO sans grand espoir… je suis bluffé par la rapidité des résultats obtenus.", authorName: "Damien L.", authorPhoto: null, profileUrl: null, rating: 5, relativeTime: "il y a 4 mois" },
-  { text: "Le GEO a complètement changé notre acquisition. On génère des leads ultra qualifiés sans augmenter notre budget.", authorName: "Julien B.", authorPhoto: null, profileUrl: null, rating: 5, relativeTime: "il y a 2 mois" },
+  { text: "With ArchipelaGrowth, I doubled my lead volume at the same budget in 2 months.", authorName: "Nicolas R.", authorPhoto: null, profileUrl: null, rating: 5, relativeTime: "2 months ago" },
+  { text: "Thanks to ArchipelaGrowth's work, we signed several leads from GEO!", authorName: "Elodie M.", authorPhoto: null, profileUrl: null, rating: 5, relativeTime: "3 months ago" },
+  { text: "We ranked #1 on ChatGPT for 100+ prompts in 1 month. Impressive.", authorName: "Claire D.", authorPhoto: null, profileUrl: null, rating: 5, relativeTime: "1 month ago" },
+  { text: "I tried GEO without much hope… I'm amazed by how fast the results came.", authorName: "Damien L.", authorPhoto: null, profileUrl: null, rating: 5, relativeTime: "4 months ago" },
+  { text: "GEO completely transformed our acquisition. We generate ultra-qualified leads without increasing budget.", authorName: "Julien B.", authorPhoto: null, profileUrl: null, rating: 5, relativeTime: "2 months ago" },
 ];
 
 const FiveStars = () => (
@@ -76,84 +75,53 @@ const TestimonialBubbles = () => {
   return (
     <section className="py-16 bg-[#F8F9FA] overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Badge */}
         <div className="flex justify-center mb-6">
           <span className="border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-full">
             Testimonials
           </span>
         </div>
 
-        {/* Title */}
         <h2 className="font-jakarta text-4xl md:text-5xl font-bold mb-10 leading-tight">
           <span className="bg-gradient-to-r from-[#000000] to-[#001354] bg-clip-text text-transparent">
-            Ce que nos clients{"\n"}disent de nous
+            What our clients{"\n"}say about us
           </span>
         </h2>
 
-        {/* Google rating bar */}
         <div className="flex flex-col items-center justify-center mb-10 gap-2">
           <div className="flex items-center gap-3">
             <GoogleLogo />
             <span className="font-jakarta text-2xl font-bold text-[#010D3E]">{rating.toFixed(1)}</span>
             <FiveStars />
             {totalReviews && (
-              <span className="text-sm text-[#010D3E]/50 font-inter">({totalReviews} avis)</span>
+              <span className="text-sm text-[#010D3E]/50 font-inter">({totalReviews} reviews)</span>
             )}
           </div>
           <div className="flex items-center gap-3">
-            <p className="text-sm text-[#010D3E]/60 font-inter">
-              Avis Google vérifiés
-            </p>
+            <p className="text-sm text-[#010D3E]/60 font-inter">Verified Google Reviews</p>
             <span className="text-[#010D3E]/30">·</span>
-            <a
-              href={GOOGLE_MAPS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-medium text-[#0043F1] hover:underline font-inter"
-            >
-              Voir tous les avis →
+            <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#0043F1] hover:underline font-inter">
+              See all reviews →
             </a>
           </div>
         </div>
 
-        {/* Scrolling reviews */}
         <div className="relative">
-          <div
-            className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
+          <div className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             {reviews.map((review, idx) => (
-              <a
-                key={idx}
-                href={review.profileUrl || GOOGLE_MAPS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="min-w-[300px] max-w-[340px] bg-white rounded-xl p-5 shadow-sm border border-gray-100 snap-start flex-shrink-0 hover:shadow-md transition-shadow cursor-pointer"
-              >
+              <a key={idx} href={review.profileUrl || GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" className="min-w-[300px] max-w-[340px] bg-white rounded-xl p-5 shadow-sm border border-gray-100 snap-start flex-shrink-0 hover:shadow-md transition-shadow cursor-pointer">
                 <div className="flex items-center justify-between mb-3">
                   <FiveStars />
                   <GoogleLogo />
                 </div>
-                <p className="text-[#010D3E]/80 font-inter text-sm leading-relaxed mb-4 line-clamp-4">
-                  "{review.text}"
-                </p>
+                <p className="text-[#010D3E]/80 font-inter text-sm leading-relaxed mb-4 line-clamp-4">"{review.text}"</p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {review.authorPhoto ? (
-                      <img
-                        src={review.authorPhoto}
-                        alt={review.authorName}
-                        className="w-8 h-8 rounded-full object-cover"
-                        referrerPolicy="no-referrer"
-                      />
+                      <img src={review.authorPhoto} alt={review.authorName} className="w-8 h-8 rounded-full object-cover" referrerPolicy="no-referrer" />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-[#0043F1] flex items-center justify-center text-white font-bold text-xs font-jakarta">
-                        {review.authorName.charAt(0)}
-                      </div>
+                      <div className="w-8 h-8 rounded-full bg-[#0043F1] flex items-center justify-center text-white font-bold text-xs font-jakarta">{review.authorName.charAt(0)}</div>
                     )}
-                    <span className="font-jakarta font-semibold text-sm text-[#010D3E]">
-                      {review.authorName}
-                    </span>
+                    <span className="font-jakarta font-semibold text-sm text-[#010D3E]">{review.authorName}</span>
                   </div>
                   <span className="text-xs text-[#010D3E]/40 font-inter">{review.relativeTime}</span>
                 </div>
@@ -167,13 +135,9 @@ const TestimonialBubbles = () => {
             <div className="w-5 h-5 border-2 border-[#0043F1]/30 border-t-[#0043F1] rounded-full animate-spin" />
           </div>
         )}
-        {/* CTA */}
         <div className="flex justify-center mt-10">
-          <Button
-            asChild
-            className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-bold px-8 py-3 text-base rounded-lg"
-          >
-            <Link to="/contact#contact-form">Contactez-nous</Link>
+          <Button asChild className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-bold px-8 py-3 text-base rounded-lg">
+            <Link to="/contact#contact-form">Contact Us</Link>
           </Button>
         </div>
       </div>
