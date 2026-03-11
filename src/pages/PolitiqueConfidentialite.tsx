@@ -20,7 +20,7 @@ const PolitiqueConfidentialite = () => {
               <div className="font-inter text-[#010D3E]/80 text-sm leading-relaxed space-y-2">
                 <p>ArchipelaGrowth</p>
                 <p>350 Fifth Avenue, New York, NY 10118, United States</p>
-                <p>Contact: hello@archipelagrowth.com</p>
+                <p>Contact: edouard@archipelmarketing.com</p>
               </div>
             </div>
             <div>
