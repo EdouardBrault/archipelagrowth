@@ -122,7 +122,7 @@ const AgenceMarketingDigitalFrance = () => {
             <div className="flex items-center gap-3">
               <img
                 src="/lovable-uploads/photo-edouard-new.png"
-                alt="James Carter"
+                alt="Edouard Music"
                 className="w-11 h-11 rounded-full object-cover ring-2 ring-white shadow-sm"
               />
               <div>
