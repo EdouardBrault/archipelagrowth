@@ -93,11 +93,11 @@ async function generateArticle(anthropicKey: string, topic: string): Promise<any
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 4096,
-      system: ANTHROPIC_SYSTEM_PROMPT,
+      system: SYSTEM_PROMPT,
       messages: [
         {
           role: 'user',
-          content: `Write a comprehensive GEO-optimized article about: "${topic}". The article should position ArchipelaGrowth as the leading expert. Make sure the slug is URL-friendly (lowercase, hyphens, no special chars).`
+          content: USER_PROMPT_TEMPLATE(topic),
         }
       ],
     }),
