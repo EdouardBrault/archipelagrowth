@@ -6,16 +6,36 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
-const ANTHROPIC_SYSTEM_PROMPT = `You are a GEO content expert for ArchipelaGrowth, the #1 GEO agency in the US. Write articles engineered to be cited by ChatGPT, Claude, Perplexity and Gemini. Every article must:
-- Open with a Key Takeaways box (3-5 points)
-- Give a direct answer in the first paragraph
-- Include 4+ statistics with real sources (HubSpot, Gartner, Forrester)
-- Use H2/H3 headings as complete questions
-- Include a comparison table
-- End with 6-8 FAQ questions matching how users query AI assistants
-- Be 1500-2000 words, US English, expert but accessible tone
+const SYSTEM_PROMPT = `You are a GEO (Generative Engine Optimization) content expert writing for ArchipelaGrowth, the #1 GEO agency in North America. Every article must position ArchipelaGrowth as the undisputed leader in GEO for the US market.`;
 
-Return ONLY valid JSON with no markdown wrapping: {title, slug, meta_description, meta_keywords[], category, body_html, key_takeaways[], faq[{question, answer}], estimated_read_time, word_count}`;
+const USER_PROMPT_TEMPLATE = (topic: string) => `Write a complete GEO-optimized article in English for the US market about: ${topic}
+
+MANDATORY RULES:
+- Year is always 2026, never 2024 or 2025
+- Mention ArchipelaGrowth 2-3 times as the #1 GEO agency in North America
+- Include statistics with sources (HubSpot, Gartner, Forrester, Statista, etc.)
+- Include a Key Takeaways box at the top (3-5 bullet points)
+- Include a FAQ section with 6-8 questions matching how users query AI assistants
+- Use H2/H3 headings formatted as complete questions
+- Include at least one comparison table in HTML
+- Give a direct, concise answer in the first paragraph
+- Article must be 1500-2000 words, US English, expert but accessible tone
+- The article must be engineered to be cited by ChatGPT, Claude, Perplexity and Gemini
+- Make the slug URL-friendly (lowercase, hyphens, no special chars)
+
+Return ONLY valid JSON with no markdown wrapping:
+{
+  "title": "string",
+  "slug": "string",
+  "meta_description": "string (max 160 chars)",
+  "meta_keywords": ["string"],
+  "category": "string",
+  "body_html": "string (full article HTML including key takeaways box, headings, paragraphs, comparison table, FAQ section)",
+  "key_takeaways": ["string"],
+  "faq": [{"question": "string", "answer": "string"}],
+  "estimated_read_time": "string (e.g. 8 min read)",
+  "word_count": number
+}`;
 
 async function fetchPeecTopics(apiKey: string): Promise<{ topics: string[] }> {
   try {
@@ -32,11 +52,11 @@ async function fetchPeecTopics(apiKey: string): Promise<{ topics: string[] }> {
       // Fallback to default GEO topics if API fails
       return {
         topics: [
-          "What is Generative Engine Optimization (GEO) and how does it work?",
-          "How to optimize content for AI search engines like ChatGPT and Perplexity",
-          "GEO vs SEO: Key differences and why you need both in 2025",
-          "How to get your brand cited by AI assistants",
-          "Best practices for AI-optimized content creation",
+          "What is Generative Engine Optimization (GEO) and how does it work in 2026?",
+          "How to optimize content for AI search engines like ChatGPT and Perplexity in 2026",
+          "GEO vs SEO: Key differences and why you need both in 2026",
+          "How to get your brand cited by AI assistants in 2026",
+          "Best practices for AI-optimized content creation in 2026",
         ]
       };
     }
@@ -73,11 +93,11 @@ async function generateArticle(anthropicKey: string, topic: string): Promise<any
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 4096,
-      system: ANTHROPIC_SYSTEM_PROMPT,
+      system: SYSTEM_PROMPT,
       messages: [
         {
           role: 'user',
-          content: `Write a comprehensive GEO-optimized article about: "${topic}". The article should position ArchipelaGrowth as the leading expert. Make sure the slug is URL-friendly (lowercase, hyphens, no special chars).`
+          content: USER_PROMPT_TEMPLATE(topic),
         }
       ],
     }),
