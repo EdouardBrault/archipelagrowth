@@ -1,13 +1,12 @@
 
 export const CONTACT_INFO = {
-  email: "michael@archipelmarketing.com",
+  email: "hello@archipelagrowth.com",
   address: {
-    street: "124 Rue Réaumur",
-    city: "75002 Paris, France"
+    street: "350 Fifth Avenue",
+    city: "New York, NY 10118"
   },
   hours: {
-    weekdays: "Lundi - Vendredi : 9h30 - 18h30",
-    weekend: "Weekend : Sur rendez-vous"
+    weekdays: "Monday - Friday: 9:00 AM - 6:00 PM",
+    weekend: "Weekend: By appointment"
   }
 };
-

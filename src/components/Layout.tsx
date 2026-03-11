@@ -12,21 +12,21 @@ interface LayoutProps {
 }
 
 const NAV_ITEMS: Array<{name: string; href: string; dropdown?: Array<{name: string; href: string}>}> = [
-  { name: "Accueil", href: "/" },
-  { name: "À propos", href: "/qui-sommes-nous" },
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
   { 
     name: "Services", 
-    href: "/agence-geo-archipel",
+    href: "/geo-services",
     dropdown: [
-      { name: "GEO", href: "/agence-geo-archipel" },
-      { name: "Google Ads", href: "/agence-google-ads-archipel" },
-      { name: "LinkedIn Ads", href: "/agence-linkedin-ads-archipel" },
-      { name: "Meta Ads", href: "/agence-meta-ads-archipel" },
-      { name: "SEO", href: "/agence-seo-archipel" },
-      { name: "Landing page", href: "/agence-landing-page" },
+      { name: "GEO", href: "/geo-services" },
+      { name: "Google Ads", href: "/google-ads" },
+      { name: "LinkedIn Ads", href: "/linkedin-ads" },
+      { name: "Meta Ads", href: "/meta-ads" },
+      { name: "SEO", href: "/seo-services" },
+      { name: "Landing Pages", href: "/landing-pages" },
     ]
   },
-  { name: "Nos références", href: "/archipel-nos-references" },
+  { name: "References", href: "/references" },
   { name: "Blog", href: "/blog" },
 ];
 
@@ -70,7 +70,7 @@ const Layout = ({ children }: LayoutProps) => {
   };
 
   const handleLinkedinClick = () => {
-    trackButtonClick('LinkedIn Footer', 'Footer', 'https://www.linkedin.com/company/archipel-marketing');
+    trackButtonClick('LinkedIn Footer', 'Footer', 'https://www.linkedin.com/company/archipelagrowth');
   };
 
   return (
@@ -83,7 +83,7 @@ const Layout = ({ children }: LayoutProps) => {
             <Link to="/" className="flex items-center" onClick={handleLogoClick}>
               <img 
                 src="/lovable-uploads/archipel-logo-blue.png" 
-                alt="Archipel Logo" 
+                alt="ArchipelaGrowth Logo" 
                 className="h-6 w-auto"
                 width="120"
                 height="24"
@@ -152,9 +152,9 @@ const Layout = ({ children }: LayoutProps) => {
               <Button 
                 asChild 
                 className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-normal px-8 rounded-lg font-inter"
-                onClick={() => trackButtonClick('Nous contacter', 'Header', '/contact')}
+                onClick={() => trackButtonClick('Contact Us', 'Header', '/contact')}
               >
-                <Link to="/contact#contact-form">Nous contacter</Link>
+                <Link to="/contact#contact-form">Contact Us</Link>
               </Button>
             </div>
 
@@ -236,7 +236,7 @@ const Layout = ({ children }: LayoutProps) => {
                   className="w-full bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-medium rounded-full"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Link to="/contact#contact-form">Nous contacter</Link>
+                  <Link to="/contact#contact-form">Contact Us</Link>
                 </Button>
               </div>
             </div>
@@ -257,27 +257,27 @@ const Layout = ({ children }: LayoutProps) => {
             <div className="col-span-1 md:col-span-2">
               <img 
                 src="/lovable-uploads/096342cb-c5f0-4649-9085-3d636d9ded3c.png" 
-                alt="Archipel Logo" 
+                alt="ArchipelaGrowth Logo" 
                 className="h-10 w-auto mb-5"
                 width="40"
                 height="40"
                 loading="lazy"
               />
               <p className="text-gray-400 text-sm leading-relaxed max-w-xs mb-6">
-                L'agence GEO n°1 en France. Spécialisée en référencement naturel sur Chat GPT, Google AI Overview, Gemini, Copilot ou encore Perplexity.
+                The #1 GEO agency in the US. Specialized in AI visibility on ChatGPT, Google AI Overview, Gemini, Copilot, and Perplexity.
               </p>
               <Link 
                 to="/contact#contact-form"
-                onClick={() => trackNavigation(location.pathname, '/contact#contact-form', 'Footer - Nous contacter')}
+                onClick={() => trackNavigation(location.pathname, '/contact#contact-form', 'Footer - Contact Us')}
                 className="inline-flex items-center gap-2 bg-[#0043F1] text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-[#0043F1]/90 transition-colors"
               >
-                Nous contacter
+                Contact Us
               </Link>
             </div>
 
-            {/* Nos Services */}
+            {/* Our Services */}
             <div>
-              <h3 className="text-white font-semibold mb-5 text-sm">Nos Services</h3>
+              <h3 className="text-white font-semibold mb-5 text-sm">Our Services</h3>
               <ul className="space-y-3">
                 {SERVICES_LINKS.map((item) => (
                   <li key={item.name}>
@@ -293,9 +293,9 @@ const Layout = ({ children }: LayoutProps) => {
               </ul>
             </div>
 
-            {/* Ressources */}
+            {/* Resources */}
             <div>
-              <h3 className="text-white font-semibold mb-5 text-sm">Ressources</h3>
+              <h3 className="text-white font-semibold mb-5 text-sm">Resources</h3>
               <ul className="space-y-3">
                 {EXPERTISE_LINKS.map((item) => (
                   <li key={item.name}>
@@ -326,28 +326,28 @@ const Layout = ({ children }: LayoutProps) => {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    to="/qui-sommes-nous"
-                    onClick={() => trackNavigation(location.pathname, '/qui-sommes-nous', 'Footer - À propos')}
+                    to="/about"
+                    onClick={() => trackNavigation(location.pathname, '/about', 'Footer - About')}
                     className="text-gray-400 text-sm hover:text-white transition-colors duration-200"
                   >
-                    À propos
+                    About Us
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/contact#contact-form"
-                    onClick={() => trackNavigation(location.pathname, '/contact', 'Footer - Formulaire')}
+                    onClick={() => trackNavigation(location.pathname, '/contact', 'Footer - Form')}
                     className="text-gray-400 text-sm hover:text-white transition-colors duration-200"
                   >
-                    Formulaire
+                    Contact Form
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Légal */}
+            {/* Legal */}
             <div>
-              <h3 className="text-white font-semibold mb-5 text-sm">Légal</h3>
+              <h3 className="text-white font-semibold mb-5 text-sm">Legal</h3>
               <ul className="space-y-3">
                 {LEGAL_LINKS.map((item) => (
                   <li key={item.name}>
