@@ -31,7 +31,7 @@ export default function AdminPipeline() {
   const [stats, setStats] = useState<PipelineStats>({ total: 0, publishedToday: 0, googleIndexed: 0, bingIndexed: 0 });
   const [loading, setLoading] = useState(true);
   const [running, setRunning] = useState(false);
-  const [pipelineResult, setPipelineResult] = useState<any>(null);
+  
   const { toast } = useToast();
 
   const fetchArticles = useCallback(async () => {
