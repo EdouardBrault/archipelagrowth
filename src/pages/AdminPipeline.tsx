@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Play, RefreshCw, FileText, Globe, Search, CheckCircle, XCircle } from "lucide-react";
+import { Loader2, RefreshCw, FileText, Globe, Search, CheckCircle, XCircle } from "lucide-react";
 
 interface ArticleRow {
   id: string;
@@ -31,7 +31,7 @@ export default function AdminPipeline() {
   const [stats, setStats] = useState<PipelineStats>({ total: 0, publishedToday: 0, googleIndexed: 0, bingIndexed: 0 });
   const [loading, setLoading] = useState(true);
   const [running, setRunning] = useState(false);
-  const [pipelineResult, setPipelineResult] = useState<any>(null);
+  
   const { toast } = useToast();
 
   const fetchArticles = useCallback(async () => {
@@ -59,24 +59,6 @@ export default function AdminPipeline() {
   }, [toast]);
 
   useEffect(() => { fetchArticles(); }, [fetchArticles]);
-
-  const runPipeline = async () => {
-    setRunning(true);
-    setPipelineResult(null);
-    try {
-      const { data, error } = await supabase.functions.invoke("run-daily-pipeline", {
-        body: { target_count: 15 },
-      });
-      if (error) throw error;
-      setPipelineResult(data);
-      toast({ title: "Pipeline complete!", description: `${data.articles_generated} articles generated` });
-      fetchArticles();
-    } catch (err: any) {
-      toast({ title: "Pipeline failed", description: err.message, variant: "destructive" });
-    } finally {
-      setRunning(false);
-    }
-  };
 
   const runIndexing = async () => {
     setRunning(true);
@@ -112,8 +94,8 @@ export default function AdminPipeline() {
     <div className="min-h-screen bg-background p-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">GEO Content Pipeline</h1>
-          <p className="text-muted-foreground mt-1">Automated article generation & indexing</p>
+         <h1 className="text-3xl font-bold text-foreground">GEO Content Management</h1>
+          <p className="text-muted-foreground mt-1">Article management & indexing</p>
         </div>
         <div className="flex gap-3">
           <Button variant="outline" onClick={fetchArticles} disabled={loading}>
@@ -121,12 +103,8 @@ export default function AdminPipeline() {
             Refresh
           </Button>
           <Button onClick={runIndexing} disabled={running} variant="outline">
-            <Globe className="w-4 h-4 mr-2" />
+            {running ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Globe className="w-4 h-4 mr-2" />}
             Index Now
-          </Button>
-          <Button onClick={runPipeline} disabled={running} className="bg-primary text-primary-foreground">
-            {running ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Play className="w-4 h-4 mr-2" />}
-            {running ? "Running..." : "Run Pipeline Now"}
           </Button>
         </div>
       </div>
@@ -151,20 +129,6 @@ export default function AdminPipeline() {
         </Card>
       </div>
 
-      {/* Pipeline result */}
-      {pipelineResult && (
-        <Card className="mb-8 border-green-200 bg-green-50/50">
-          <CardContent className="pt-4">
-            <p className="font-semibold text-green-800">Last Pipeline Run</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 text-sm">
-              <div><span className="text-muted-foreground">Articles Generated:</span> <strong>{pipelineResult.articles_generated}</strong></div>
-              <div><span className="text-muted-foreground">Errors:</span> <strong>{pipelineResult.generation_errors || 0}</strong></div>
-              <div><span className="text-muted-foreground">Google Indexed:</span> <strong>{pipelineResult.indexed_google}</strong></div>
-              <div><span className="text-muted-foreground">Bing Indexed:</span> <strong>{pipelineResult.indexed_bing}</strong></div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Articles table */}
       <Card>
