@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Play, RefreshCw, FileText, Globe, Search, CheckCircle, XCircle } from "lucide-react";
+import { Loader2, RefreshCw, FileText, Globe, Search, CheckCircle, XCircle } from "lucide-react";
 
 interface ArticleRow {
   id: string;
