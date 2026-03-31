@@ -20,7 +20,7 @@ const ArticleActions = ({ article, onStatusUpdate, onDelete }: ArticleActionsPro
         className="h-8 w-8 p-0 text-[#010D3E]/40 hover:text-[#0043F1] hover:bg-[#0043F1]/5"
         title="Modifier"
       >
-        <Link to={`/archipel-dashboard/edit-article/${article.id}`}>
+        <Link to={`/admin-dashboard/edit-article/${article.id}`}>
           <Edit className="w-3.5 h-3.5" />
         </Link>
       </Button>
