@@ -60,24 +60,6 @@ export default function AdminPipeline() {
 
   useEffect(() => { fetchArticles(); }, [fetchArticles]);
 
-  const runPipeline = async () => {
-    setRunning(true);
-    setPipelineResult(null);
-    try {
-      const { data, error } = await supabase.functions.invoke("run-daily-pipeline", {
-        body: { target_count: 15 },
-      });
-      if (error) throw error;
-      setPipelineResult(data);
-      toast({ title: "Pipeline complete!", description: `${data.articles_generated} articles generated` });
-      fetchArticles();
-    } catch (err: any) {
-      toast({ title: "Pipeline failed", description: err.message, variant: "destructive" });
-    } finally {
-      setRunning(false);
-    }
-  };
-
   const runIndexing = async () => {
     setRunning(true);
     try {
