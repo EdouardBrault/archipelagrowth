@@ -94,8 +94,8 @@ export default function AdminPipeline() {
     <div className="min-h-screen bg-background p-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">GEO Content Pipeline</h1>
-          <p className="text-muted-foreground mt-1">Automated article generation & indexing</p>
+         <h1 className="text-3xl font-bold text-foreground">GEO Content Management</h1>
+          <p className="text-muted-foreground mt-1">Article management & indexing</p>
         </div>
         <div className="flex gap-3">
           <Button variant="outline" onClick={fetchArticles} disabled={loading}>
@@ -103,12 +103,8 @@ export default function AdminPipeline() {
             Refresh
           </Button>
           <Button onClick={runIndexing} disabled={running} variant="outline">
-            <Globe className="w-4 h-4 mr-2" />
+            {running ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Globe className="w-4 h-4 mr-2" />}
             Index Now
-          </Button>
-          <Button onClick={runPipeline} disabled={running} className="bg-primary text-primary-foreground">
-            {running ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Play className="w-4 h-4 mr-2" />}
-            {running ? "Running..." : "Run Pipeline Now"}
           </Button>
         </div>
       </div>
