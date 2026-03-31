@@ -20,7 +20,7 @@ const AdminDashboardHeader = ({ articlesCount }: AdminDashboardHeaderProps) => {
         size="sm"
         className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-inter text-xs gap-1.5"
       >
-        <Link to="/archipel-dashboard/create-article">
+        <Link to="/admin-dashboard/create-article">
           <Plus className="h-3.5 w-3.5" />
           Nouvel article
         </Link>

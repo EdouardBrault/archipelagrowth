@@ -84,6 +84,7 @@ const App = () => (
         <Route path="/archipel-login" element={<Navigate to="/admin-dashboard" replace />} />
         <Route path="/archipel-dashboard" element={<Navigate to="/admin-dashboard" replace />} />
         <Route path="/archipel-dashboard/create-article" element={<Navigate to="/admin-dashboard/create-article" replace />} />
+        <Route path="/archipel-dashboard/edit-article/:id" element={<Navigate to="/admin-dashboard/edit-article/:id" replace />} />
         <Route path="/agence-marketing-digital-france" element={<Navigate to="/" replace />} />
         <Route path="/archipel-articles" element={<Navigate to="/blog" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
