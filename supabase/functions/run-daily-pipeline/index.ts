@@ -24,7 +24,7 @@ serve(async (req) => {
     console.log(`🚀 Starting daily pipeline — indexing only`);
 
     // Step 1: Index articles
-    console.log('Step 2: Indexing articles...');
+    console.log('Indexing articles...');
     const indexRes = await fetch(`${supabaseUrl}/functions/v1/index-articles`, {
       method: 'POST',
       headers: {
@@ -39,8 +39,6 @@ serve(async (req) => {
     const summary = {
       success: true,
       pipeline_run_at: new Date().toISOString(),
-      articles_generated: generateData.articles_generated || 0,
-      generation_errors: generateData.errors?.length || 0,
       indexed_google: indexData.indexed_google || 0,
       indexed_bing: indexData.indexed_bing || 0,
     };
