@@ -20,24 +20,72 @@ export interface PipelineArticle {
   target_prompt: string | null;
 }
 
-const fetchPublishedPipelineArticles = async (): Promise<PipelineArticle[]> => {
-  const { data, error } = await supabase
-    .from("articles")
-    .select("*")
-    .eq("status", "published")
-    .order("published_at", { ascending: false });
+/**
+ * Normalize a "Blog Archipel AI" row into the PipelineArticle shape
+ */
+function normalizeBlogArchipelRow(row: any): PipelineArticle {
+  return {
+    id: String(row.id),
+    slug: row.slug || "",
+    title: row.title || "",
+    meta_description: row.meta_description || row.excerpt || null,
+    meta_keywords: row.tags ? row.tags.split(",").map((t: string) => t.trim()) : null,
+    category: row.category || null,
+    body_html: row.content || "",
+    key_takeaways: null,
+    faq: row.faq || row.faq_sections || null,
+    estimated_read_time: row.reading_time ? `${row.reading_time} min` : null,
+    word_count: row.word_count || null,
+    published_at: row.published_at || null,
+    status: row.status || null,
+    google_indexed: null,
+    bing_indexed: null,
+    target_prompt: null,
+  };
+}
 
-  if (error) {
-    console.error("Error fetching pipeline articles:", error);
-    return [];
-  }
-  return (data || []) as unknown as PipelineArticle[];
+const fetchAllPublishedArticles = async (): Promise<PipelineArticle[]> => {
+  // Fetch from both tables in parallel
+  const [pipelineRes, blogRes] = await Promise.all([
+    supabase
+      .from("articles")
+      .select("*")
+      .eq("status", "published")
+      .order("published_at", { ascending: false }),
+    supabase
+      .from("Blog Archipel AI")
+      .select("*")
+      .eq("status", "published")
+      .order("published_at", { ascending: false }),
+  ]);
+
+  if (pipelineRes.error) console.error("Error fetching pipeline articles:", pipelineRes.error);
+  if (blogRes.error) console.error("Error fetching blog articles:", blogRes.error);
+
+  const pipelineArticles = ((pipelineRes.data || []) as unknown as PipelineArticle[]);
+  const blogArticles = (blogRes.data || []).map(normalizeBlogArchipelRow);
+
+  // Merge: pipeline first, then blog articles not already present by slug
+  const slugs = new Set(pipelineArticles.map((a) => a.slug));
+  const merged = [
+    ...pipelineArticles,
+    ...blogArticles.filter((a) => !slugs.has(a.slug)),
+  ];
+
+  // Sort by published_at descending
+  merged.sort((a, b) => {
+    const da = a.published_at ? new Date(a.published_at).getTime() : 0;
+    const db = b.published_at ? new Date(b.published_at).getTime() : 0;
+    return db - da;
+  });
+
+  return merged;
 };
 
 export const usePipelineArticles = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["pipeline-articles-published"],
-    queryFn: fetchPublishedPipelineArticles,
+    queryFn: fetchAllPublishedArticles,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -51,18 +99,29 @@ export const usePipelineArticleBySlug = (slug: string | undefined) => {
   return useQuery({
     queryKey: ["pipeline-article", slug],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // Try pipeline articles table first
+      const { data: pipelineData, error: pipelineError } = await supabase
         .from("articles")
         .select("*")
         .eq("slug", slug!)
         .eq("status", "published")
         .maybeSingle();
 
-      if (error) {
-        console.error("Error fetching article by slug:", error);
-        return null;
-      }
-      return data as unknown as PipelineArticle | null;
+      if (pipelineError) console.error("Error fetching pipeline article by slug:", pipelineError);
+      if (pipelineData) return pipelineData as unknown as PipelineArticle;
+
+      // Fallback to Blog Archipel AI table
+      const { data: blogData, error: blogError } = await supabase
+        .from("Blog Archipel AI")
+        .select("*")
+        .eq("slug", slug!)
+        .eq("status", "published")
+        .maybeSingle();
+
+      if (blogError) console.error("Error fetching blog article by slug:", blogError);
+      if (blogData) return normalizeBlogArchipelRow(blogData);
+
+      return null;
     },
     enabled: !!slug,
     staleTime: 5 * 60 * 1000,
