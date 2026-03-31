@@ -21,27 +21,9 @@ serve(async (req) => {
       if (body.target_count) targetCount = body.target_count;
     } catch { /* use default */ }
 
-    console.log(`🚀 Starting daily pipeline — target: ${targetCount} articles`);
+    console.log(`🚀 Starting daily pipeline — indexing only`);
 
-    // Step 1: Generate articles
-    console.log('Step 1: Generating articles...');
-    const generateRes = await fetch(`${supabaseUrl}/functions/v1/generate-articles`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${supabaseAnonKey}`,
-      },
-      body: JSON.stringify({ target_count: targetCount }),
-    });
-
-    const generateData = await generateRes.json();
-    console.log(`Articles generated: ${generateData.articles_generated || 0}`);
-
-    if (!generateRes.ok) {
-      throw new Error(`Article generation failed: ${JSON.stringify(generateData)}`);
-    }
-
-    // Step 2: Index articles
+    // Step 1: Index articles
     console.log('Step 2: Indexing articles...');
     const indexRes = await fetch(`${supabaseUrl}/functions/v1/index-articles`, {
       method: 'POST',
