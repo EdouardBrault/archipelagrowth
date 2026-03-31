@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useParams } from "react-router-dom";
 import Index from "./pages/Index";
 import ArchipelService from "./pages/ArchipelService";
 import ArchipelContact from "./pages/ArchipelContact";
@@ -27,6 +27,11 @@ import CreateArticleForm from "./components/CreateArticle/CreateArticleForm";
 import EditArticleForm from "./components/EditArticle/EditArticleForm";
 
 const queryClient = new QueryClient();
+
+const LegacyEditArticleRedirect = () => {
+  const { id } = useParams<{ id: string }>();
+  return <Navigate to={id ? `/admin-dashboard/edit-article/${id}` : "/admin-dashboard"} replace />;
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -84,6 +89,7 @@ const App = () => (
         <Route path="/archipel-login" element={<Navigate to="/admin-dashboard" replace />} />
         <Route path="/archipel-dashboard" element={<Navigate to="/admin-dashboard" replace />} />
         <Route path="/archipel-dashboard/create-article" element={<Navigate to="/admin-dashboard/create-article" replace />} />
+        <Route path="/archipel-dashboard/edit-article/:id" element={<LegacyEditArticleRedirect />} />
         <Route path="/agence-marketing-digital-france" element={<Navigate to="/" replace />} />
         <Route path="/archipel-articles" element={<Navigate to="/blog" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />

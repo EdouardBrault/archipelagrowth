@@ -79,7 +79,7 @@ const AdminAuth = ({ children }: AdminAuthProps) => {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/archipel-dashboard` }
+          options: { emailRedirectTo: `${window.location.origin}/admin-dashboard` }
         });
         if (error) {
           toast({ title: "Erreur d'inscription", description: error.message, variant: "destructive" });

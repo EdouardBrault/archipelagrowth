@@ -34,13 +34,13 @@ const CreateArticleForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const success = await submitArticle();
-    if (success) setTimeout(() => navigate('/archipel-dashboard'), 2000);
+    if (success) setTimeout(() => navigate('/admin-dashboard'), 2000);
   };
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       <div className="flex items-center gap-4">
-        <Button type="button" variant="ghost" size="sm" onClick={() => navigate('/archipel-dashboard')}
+        <Button type="button" variant="ghost" size="sm" onClick={() => navigate('/admin-dashboard')}
           className="text-[#010D3E]/50 hover:text-[#010D3E] hover:bg-[#F3F4F6] font-inter text-xs gap-1.5">
           <ArrowLeft className="w-3.5 h-3.5" /> Retour
         </Button>
