@@ -129,20 +129,6 @@ export default function AdminPipeline() {
         </Card>
       </div>
 
-      {/* Pipeline result */}
-      {pipelineResult && (
-        <Card className="mb-8 border-green-200 bg-green-50/50">
-          <CardContent className="pt-4">
-            <p className="font-semibold text-green-800">Last Pipeline Run</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 text-sm">
-              <div><span className="text-muted-foreground">Articles Generated:</span> <strong>{pipelineResult.articles_generated}</strong></div>
-              <div><span className="text-muted-foreground">Errors:</span> <strong>{pipelineResult.generation_errors || 0}</strong></div>
-              <div><span className="text-muted-foreground">Google Indexed:</span> <strong>{pipelineResult.indexed_google}</strong></div>
-              <div><span className="text-muted-foreground">Bing Indexed:</span> <strong>{pipelineResult.indexed_bing}</strong></div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Articles table */}
       <Card>
