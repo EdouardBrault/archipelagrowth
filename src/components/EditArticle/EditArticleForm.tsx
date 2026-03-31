@@ -105,7 +105,7 @@ const EditArticleForm = () => {
       if (error) { toast({ title: "Erreur", description: "Impossible de sauvegarder.", variant: "destructive" }); return; }
       toast({ title: "Sauvegardé", description: "Article mis à jour." });
       if (formData.status === 'published' && formData.slug) await submitArticleToBing(formData.slug);
-      navigate('/archipel-dashboard');
+      navigate('/admin-dashboard');
     } catch (error) { console.error('Error:', error); }
     finally { setSaving(false); }
   };

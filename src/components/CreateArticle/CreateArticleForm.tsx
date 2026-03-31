@@ -34,7 +34,7 @@ const CreateArticleForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const success = await submitArticle();
-    if (success) setTimeout(() => navigate('/archipel-dashboard'), 2000);
+    if (success) setTimeout(() => navigate('/admin-dashboard'), 2000);
   };
 
   return (
