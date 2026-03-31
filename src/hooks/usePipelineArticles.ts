@@ -23,6 +23,14 @@ export interface PipelineArticle {
 /**
  * Normalize a "Blog Archipel AI" row into the PipelineArticle shape
  */
+function parseFaqField(val: any): any {
+  if (!val) return null;
+  if (typeof val === "string") {
+    try { return JSON.parse(val); } catch { return null; }
+  }
+  return val;
+}
+
 function normalizeBlogArchipelRow(row: any): PipelineArticle {
   return {
     id: String(row.id),
