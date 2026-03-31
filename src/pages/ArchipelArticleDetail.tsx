@@ -54,7 +54,12 @@ const ArchipelArticleDetail = () => {
 
   const faqs = useMemo(() => {
     if (!article?.faq) return [];
-    if (Array.isArray(article.faq)) return article.faq;
+    let raw = article.faq;
+    // Handle double-encoded JSON string from jsonb column
+    if (typeof raw === "string") {
+      try { raw = JSON.parse(raw); } catch { return []; }
+    }
+    if (Array.isArray(raw)) return raw;
     return [];
   }, [article]);
 
