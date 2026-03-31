@@ -97,8 +97,8 @@ const EditArticleForm = () => {
         featured_image: formData.featured_image, alt_text: formData.alt_text,
         article_image: formData.article_image, article_image_alt: formData.article_image_alt,
         status: formData.status, published_at: formData.published_at || null, author: formData.author,
-        faq: formData.faq.length > 0 ? JSON.stringify(formData.faq) : null,
-        faq_sections: formData.faqSections.length > 0 ? JSON.stringify(formData.faqSections) : null,
+        faq: formData.faq.length > 0 ? formData.faq : null,
+        faq_sections: formData.faqSections.length > 0 ? formData.faqSections : null,
         updated_at: new Date().toISOString(),
       }).eq('id', parseInt(id!));
 
