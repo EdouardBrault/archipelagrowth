@@ -52,6 +52,9 @@ function normalizeBlogArchipelRow(row: any): PipelineArticle {
     google_indexed: null,
     bing_indexed: null,
     target_prompt: null,
+    featured_image: row.featured_image || null,
+    article_image: row.article_image || null,
+    article_image_alt: row.article_image_alt || null,
   };
 }
 
