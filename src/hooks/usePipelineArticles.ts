@@ -18,6 +18,9 @@ export interface PipelineArticle {
   google_indexed: boolean | null;
   bing_indexed: boolean | null;
   target_prompt: string | null;
+  featured_image: string | null;
+  article_image: string | null;
+  article_image_alt: string | null;
 }
 
 /**
@@ -49,6 +52,9 @@ function normalizeBlogArchipelRow(row: any): PipelineArticle {
     google_indexed: null,
     bing_indexed: null,
     target_prompt: null,
+    featured_image: row.featured_image || null,
+    article_image: row.article_image || null,
+    article_image_alt: row.article_image_alt || null,
   };
 }
 

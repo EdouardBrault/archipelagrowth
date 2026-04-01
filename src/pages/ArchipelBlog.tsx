@@ -90,6 +90,14 @@ const ArchipelBlog = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {filteredArticles.map((article) => (
                 <Link key={article.slug} to={`/blog/${article.slug}`} className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300 block">
+                  {(article.featured_image || article.article_image) && (
+                    <img
+                      src={article.featured_image || article.article_image || ""}
+                      alt={article.article_image_alt || article.title}
+                      className="w-full aspect-[16/9] object-cover"
+                      loading="lazy"
+                    />
+                  )}
                   <div className="p-6">
                     <div className="flex items-center gap-3 mb-4">
                       {article.category && (
