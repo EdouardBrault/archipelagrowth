@@ -18,6 +18,9 @@ export interface PipelineArticle {
   google_indexed: boolean | null;
   bing_indexed: boolean | null;
   target_prompt: string | null;
+  featured_image: string | null;
+  article_image: string | null;
+  article_image_alt: string | null;
 }
 
 /**
