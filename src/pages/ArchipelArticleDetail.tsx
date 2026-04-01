@@ -211,6 +211,17 @@ const ArchipelArticleDetail = () => {
             )}
           </div>
         </div>
+
+        {/* Article Image */}
+        {(article.featured_image || article.article_image) && (
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+            <img
+              src={article.featured_image || article.article_image || ""}
+              alt={article.article_image_alt || article.title}
+              className="w-full rounded-2xl object-cover max-h-[500px]"
+            />
+          </div>
+        )}
       </section>
 
       {/* Key Takeaways */}
