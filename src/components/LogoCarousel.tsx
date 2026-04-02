@@ -1,5 +1,8 @@
 
+import { useLanguage } from "@/i18n";
+
 const LogoCarousel = () => {
+  const { t } = useLanguage();
   const logos = [
     { src: "/lovable-uploads/logo-sodexo-blue.png", alt: "Sodexo" },
     { src: "/lovable-uploads/logo-ca-assure-blue.png", alt: "CA Assure" },
@@ -38,7 +41,7 @@ const LogoCarousel = () => {
   return (
     <section className="py-4 pb-8 bg-white overflow-hidden">
       <div className="md:hidden">
-        <p className="text-center text-sm text-gray-500 font-inter mb-4">Trusted by leading brands</p>
+        <p className="text-center text-sm text-gray-500 font-inter mb-4">{t.logoCarousel.trustedBy}</p>
         <div className="flex flex-col gap-4">
           <ScrollingRow items={row1} direction="left" />
           <ScrollingRow items={row2} direction="right" />

@@ -8,37 +8,43 @@ import { Link } from "react-router-dom";
 import LogoCarousel from "@/components/LogoCarousel";
 import ContactSection from "@/components/ContactSection";
 import { useState } from "react";
+import { useLanguage } from "@/i18n";
 
-const timelineEvents = [
-  { year: "2021", title: "The Beginning", description: "Edouard and Michaël, the 2 founders of ArchipelaGrowth, met in 2021 at a marketing agency.", detail: "It's the story of a great friendship that quickly turned into a shared desire to build something together.", extra: "", month: "January", label: "The Beginning", photo: "/lovable-uploads/timeline-rencontre.jpg", photoPosition: "object-[center_25%]" },
-  { year: "2022", title: "Agency Founded", description: "In 2022, they decided to create ArchipelaGrowth, a digital marketing agency specialized in paid media. Clients quickly came thanks to their expertise and quality of service.", detail: "", extra: "", month: "June", label: "Agency Founded", photo: "/lovable-uploads/timeline-creation-agence.jpg", photoPosition: "object-[center_25%]" },
-  { year: "2025", title: "First GEO Client", description: "In 2025, ArchipelaGrowth made a bet: invest most of its resources into understanding GEO, which they believe is the future of marketing. This vision led to signing their first GEO client.", detail: "", extra: "", month: "April", label: "First GEO Client", photo: "/lovable-uploads/timeline-1er-client-geo.jpeg", photoPosition: "object-[center_25%]" },
-  { year: "2025", title: "Profound & Peec AI Partners", description: "As they served more clients, ArchipelaGrowth signed exclusive partnerships with the leading AI visibility tools. They became the first European agency to collaborate with Profound and one of the first with Peec AI.", detail: "", extra: "", month: "July", label: "Profound & Peec AI Partners", photo: "/lovable-uploads/timeline-profound.jpg", photoPosition: "object-[center_20%]" },
-  { year: "2025", title: "First Office", description: "ArchipelaGrowth's growth led to a major milestone: for the first time, the agency moved into its own office space.", detail: "", extra: "", month: "September", label: "First Office", photo: "/lovable-uploads/timeline-locaux.jpg", photoPosition: "object-center" },
-  { year: "2026", title: "100th Client Signed", description: "Approaching its 5th anniversary, ArchipelaGrowth celebrates signing its 100th client (40th in GEO). A milestone rewarding years of work, testing, dedication, and innovation.", detail: "", extra: "", month: "January", label: "100th Client Signed", photo: "/lovable-uploads/timeline-100e-client.jpg", photoPosition: "object-[center_35%]" },
-  { year: "", title: "What's Next?", description: "ArchipelaGrowth aims to become the global reference in GEO. Ambitious? Certainly. Too ambitious? It would be a shame not to aim for the stars!", detail: "", extra: "", month: "", label: "What's Next?", photo: "/lovable-uploads/timeline-rooftop.jpg", photoPosition: "object-center" },
+const timelineBase = [
+  { year: "2021", month: "January", photo: "/lovable-uploads/timeline-rencontre.jpg", photoPosition: "object-[center_25%]" },
+  { year: "2022", month: "June", photo: "/lovable-uploads/timeline-creation-agence.jpg", photoPosition: "object-[center_25%]" },
+  { year: "2025", month: "April", photo: "/lovable-uploads/timeline-1er-client-geo.jpeg", photoPosition: "object-[center_25%]" },
+  { year: "2025", month: "July", photo: "/lovable-uploads/timeline-profound.jpg", photoPosition: "object-[center_20%]" },
+  { year: "2025", month: "September", photo: "/lovable-uploads/timeline-locaux.jpg", photoPosition: "object-center" },
+  { year: "2026", month: "January", photo: "/lovable-uploads/timeline-100e-client.jpg", photoPosition: "object-[center_35%]" },
+  { year: "", month: "", photo: "/lovable-uploads/timeline-rooftop.jpg", photoPosition: "object-center" },
 ];
 
-const teamMembers = [
-  { name: "Edouard Brault", role: "Co-Founder", id: 0, photo: "/lovable-uploads/photo-edouard-v2.png" },
-  { name: "Michaël Abramczuk", role: "Co-Founder", id: 1, photo: "/lovable-uploads/photo-michael-v2.png" },
-  { name: "Nour", role: "GEO & Paid Consultant", id: 2, photo: "/lovable-uploads/photo-nour-v2.png" },
-  { name: "Germain", role: "GEO & Paid Consultant", id: 3, photo: "/lovable-uploads/photo-germain-v2.png" },
-  { name: "Nathan", role: "GEO & Paid Consultant", id: 4, photo: "/lovable-uploads/photo-nathan-v2.png" },
-  { name: "Eva", role: "GEO & Paid Consultant", id: 5, photo: "/lovable-uploads/photo-eva-v2.png" },
-  { name: "Pauline", role: "GEO & Paid Consultant", id: 6, photo: "/lovable-uploads/photo-pauline-v2.png" },
-  { name: "Léa", role: "Business Developer", id: 7, photo: "/lovable-uploads/photo-lea-v2.png" },
-  { name: "Hortense", role: "Lead Designer", id: 8, photo: "/lovable-uploads/photo-hortense-v2.png" },
+const teamPhotos = [
+  "/lovable-uploads/photo-edouard-v2.png",
+  "/lovable-uploads/photo-michael-v2.png",
+  "/lovable-uploads/photo-nour-v2.png",
+  "/lovable-uploads/photo-germain-v2.png",
+  "/lovable-uploads/photo-nathan-v2.png",
+  "/lovable-uploads/photo-eva-v2.png",
+  "/lovable-uploads/photo-pauline-v2.png",
+  "/lovable-uploads/photo-lea-v2.png",
+  "/lovable-uploads/photo-hortense-v2.png",
 ];
 
-const values = [
-  { icon: Zap, title: "Performance", description: "Every action is designed to produce measurable impact: increased visibility, citations in generative engines, and sustainable competitive advantage." },
-  { icon: Timer, title: "Pragmatism", description: "GEO evolves fast. So do we. We test, analyze, and optimize continuously. No unnecessary theory: only concrete strategies that work in real AI environments." },
-  { icon: MoveRight, title: "Transparency", description: "Understanding your market before optimizing your visibility. We work transparently, with clear communication, to build a GEO strategy aligned with your business goals." },
-];
+const valueIcons = [Zap, Timer, MoveRight];
 
 const ArchipelAPropos = () => {
   const [activeTimeline, setActiveTimeline] = useState(0);
+  const { t, language, localePath } = useLanguage();
+  const canonicalUrl = language === "it" ? "https://archipelagrowth.com/it/about" : "https://archipelagrowth.com/about";
+
+  const timelineEvents = timelineBase.map((base, i) => ({
+    ...base,
+    title: t.about.timeline[i]?.title || "",
+    description: t.about.timeline[i]?.description || "",
+    label: t.about.timeline[i]?.label || "",
+  }));
 
   useEffect(() => {
     timelineEvents.forEach((event) => {
@@ -48,27 +54,23 @@ const ArchipelAPropos = () => {
 
   return (
     <>
-      <SEOHelmet
-        title="About Us | ArchipelaGrowth - #1 GEO Agency in the US"
-        description="Discover the story, team, and values of ArchipelaGrowth, the leading GEO agency in the US."
-        canonicalUrl="https://archipelagrowth.com/about"
-      />
+      <SEOHelmet title={t.about.seoTitle} description={t.about.seoDescription} canonicalUrl={canonicalUrl} />
       <Layout>
         <section className="py-24 md:py-32 bg-white">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="flex justify-center mb-8">
-              <span className="border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-full">Welcome! 👋</span>
+              <span className="border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-full">{t.about.welcome}</span>
             </div>
             <h1 className="font-jakarta text-5xl md:text-7xl font-bold mb-6 leading-[0.95] tracking-tight">
-              <span className="bg-gradient-to-r from-[#000000] to-[#001354] bg-clip-text text-transparent">About ArchipelaGrowth</span>
+              <span className="bg-gradient-to-r from-[#000000] to-[#001354] bg-clip-text text-transparent">{t.about.title}</span>
             </h1>
-            <p className="text-lg text-[#010D3E] font-inter mb-8">ArchipelaGrowth is the story of a pioneering GEO agency and consultants who rolled up their sleeves in 2024 to master how it works.</p>
+            <p className="text-lg text-[#010D3E] font-inter mb-8">{t.about.description}</p>
             <div className="flex flex-wrap justify-center items-center gap-4">
               <Button asChild size="lg" className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-normal font-inter rounded-lg px-8">
-                <Link to="/contact#contact-form">Contact Us</Link>
+                <Link to={localePath("/contact") + "#contact-form"}>{t.about.cta}</Link>
               </Button>
-              <Link to="/contact#contact-form" className="text-[#0043F1] font-normal font-inter flex items-center gap-1.5 hover:gap-2.5 transition-all">
-                Your GEO Score <ArrowRight className="w-4 h-4" />
+              <Link to={localePath("/contact") + "#contact-form"} className="text-[#0043F1] font-normal font-inter flex items-center gap-1.5 hover:gap-2.5 transition-all">
+                {t.about.ctaSecondary} <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -93,7 +95,7 @@ const ArchipelAPropos = () => {
                   <h3 className="font-jakarta text-2xl md:text-4xl font-bold mb-3 md:mb-4 text-[#010D3E]">{timelineEvents[activeTimeline].title}</h3>
                   <p className="font-inter text-[#010D3E]/80 text-sm md:text-base mb-3">{timelineEvents[activeTimeline].description}</p>
                   <Button onClick={() => { if (activeTimeline < timelineEvents.length - 1) setActiveTimeline(activeTimeline + 1); }} className="hidden md:inline-flex bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-inter font-normal rounded-full px-6">
-                    Next milestone <ArrowRight className="ml-2 w-4 h-4" />
+                    {t.about.nextMilestone} <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </div>
               </div>
@@ -138,17 +140,17 @@ const ArchipelAPropos = () => {
 
         <section id="our-team" className="py-20 bg-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="flex justify-center mb-6"><span className="border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-full">Meet the Team</span></div>
-            <h2 className="font-jakarta text-4xl md:text-5xl font-bold mb-4 leading-tight"><span className="bg-gradient-to-r from-[#000000] to-[#001354] bg-clip-text text-transparent">Our Team</span></h2>
-            <p className="text-[#010D3E] font-inter mb-8 max-w-xl mx-auto">ArchipelaGrowth is a dynamic agency built by talented, agile, and attentive professionals.</p>
+            <div className="flex justify-center mb-6"><span className="border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-full">{t.about.teamBadge}</span></div>
+            <h2 className="font-jakarta text-4xl md:text-5xl font-bold mb-4 leading-tight"><span className="bg-gradient-to-r from-[#000000] to-[#001354] bg-clip-text text-transparent">{t.about.teamTitle}</span></h2>
+            <p className="text-[#010D3E] font-inter mb-8 max-w-xl mx-auto">{t.about.teamDescription}</p>
             <div className="flex justify-center mb-12">
-              <Button asChild className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-inter font-normal rounded-lg px-8"><Link to="/contact#contact-form">Contact Us</Link></Button>
+              <Button asChild className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-inter font-normal rounded-lg px-8"><Link to={localePath("/contact") + "#contact-form"}>{t.about.cta}</Link></Button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-              {teamMembers.map((member) => (
-                <div key={member.id} className="text-center">
+              {t.about.teamMembers.map((member, i) => (
+                <div key={i} className="text-center">
                   <div className="flex justify-center mb-4 w-48 h-48 rounded-full overflow-hidden mx-auto">
-                    {member.photo ? <img src={member.photo} alt={member.name} className="w-full h-full object-cover scale-110 object-[center_-5%]" loading="lazy" /> : <div className="w-full h-full bg-gray-100" />}
+                    <img src={teamPhotos[i]} alt={member.name} className="w-full h-full object-cover scale-110 object-[center_-5%]" loading="lazy" />
                   </div>
                   <h3 className="font-jakarta font-bold text-[#010D3E] text-lg">{member.name}</h3>
                   <p className="font-inter text-[#010D3E]/60 text-sm">{member.role}</p>
@@ -160,26 +162,27 @@ const ArchipelAPropos = () => {
 
         <section className="py-20 bg-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="flex justify-center mb-6"><span className="border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-full">About Us</span></div>
-            <h2 className="font-jakarta text-4xl md:text-6xl font-bold mb-6 leading-tight"><span className="bg-gradient-to-r from-[#000000] to-[#001354] bg-clip-text text-transparent">Our Values</span></h2>
-            <p className="text-[#010D3E]/70 font-inter mb-16 max-w-xl mx-auto leading-relaxed">
-              GEO is redefining the rules of online visibility.<br />At ArchipelaGrowth, our values guide every decision, recommendation, and action.
-            </p>
+            <div className="flex justify-center mb-6"><span className="border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-full">{t.about.valuesBadge}</span></div>
+            <h2 className="font-jakarta text-4xl md:text-6xl font-bold mb-6 leading-tight"><span className="bg-gradient-to-r from-[#000000] to-[#001354] bg-clip-text text-transparent">{t.about.valuesTitle}</span></h2>
+            <p className="text-[#010D3E]/70 font-inter mb-16 max-w-xl mx-auto leading-relaxed whitespace-pre-line">{t.about.valuesDescription}</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-14">
-              {values.map((v, index) => (
-                <div key={v.title} className="text-center group hover:-translate-y-2 transition-all duration-500 ease-out" style={{ animationDelay: `${index * 150}ms` }}>
-                  <div className="flex justify-center mb-5">
-                    <div className="w-14 h-14 rounded-2xl bg-[#0043F1]/5 flex items-center justify-center group-hover:bg-[#0043F1]/10 group-hover:scale-110 transition-all duration-500">
-                      <v.icon className="w-7 h-7 text-[#0043F1] group-hover:scale-110 transition-transform duration-500" strokeWidth={1.5} />
+              {t.about.values.map((v, index) => {
+                const Icon = valueIcons[index];
+                return (
+                  <div key={v.title} className="text-center group hover:-translate-y-2 transition-all duration-500 ease-out" style={{ animationDelay: `${index * 150}ms` }}>
+                    <div className="flex justify-center mb-5">
+                      <div className="w-14 h-14 rounded-2xl bg-[#0043F1]/5 flex items-center justify-center group-hover:bg-[#0043F1]/10 group-hover:scale-110 transition-all duration-500">
+                        <Icon className="w-7 h-7 text-[#0043F1] group-hover:scale-110 transition-transform duration-500" strokeWidth={1.5} />
+                      </div>
                     </div>
+                    <h3 className="font-jakarta font-bold text-[#010D3E] text-lg mb-2">{v.title}</h3>
+                    <p className="font-inter text-[#010D3E]/60 text-sm leading-relaxed">{v.description}</p>
                   </div>
-                  <h3 className="font-jakarta font-bold text-[#010D3E] text-lg mb-2">{v.title}</h3>
-                  <p className="font-inter text-[#010D3E]/60 text-sm leading-relaxed">{v.description}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
-            <Link to="/contact#contact-form" className="text-[#0043F1] font-inter font-medium inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">
-              Let's talk? <ArrowRight className="w-4 h-4" />
+            <Link to={localePath("/contact") + "#contact-form"} className="text-[#0043F1] font-inter font-medium inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">
+              {t.about.letsTalk} <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </section>
