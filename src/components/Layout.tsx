@@ -17,6 +17,7 @@ const Layout = ({ children }: LayoutProps) => {
   const [isLangOpen, setIsLangOpen] = useState(false);
   const servicesRef = useRef<HTMLDivElement>(null);
   const langRef = useRef<HTMLDivElement>(null);
+  const langRefMobile = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const { t, language, setLanguage, localePath, languages } = useLanguage();
 
