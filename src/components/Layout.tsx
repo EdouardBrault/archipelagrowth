@@ -17,6 +17,7 @@ const Layout = ({ children }: LayoutProps) => {
   const [isLangOpen, setIsLangOpen] = useState(false);
   const servicesRef = useRef<HTMLDivElement>(null);
   const langRef = useRef<HTMLDivElement>(null);
+  const langRefMobile = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const { t, language, setLanguage, localePath, languages } = useLanguage();
 
@@ -77,7 +78,8 @@ const Layout = ({ children }: LayoutProps) => {
       if (servicesRef.current && !servicesRef.current.contains(e.target as Node)) {
         setIsServicesOpen(false);
       }
-      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+      if (langRef.current && !langRef.current.contains(e.target as Node) &&
+          langRefMobile.current && !langRefMobile.current.contains(e.target as Node)) {
         setIsLangOpen(false);
       }
     };
@@ -153,7 +155,7 @@ const Layout = ({ children }: LayoutProps) => {
 
             {/* Mobile menu button */}
             <div className="md:hidden flex items-center gap-3">
-              <div className="relative" ref={langRef}>
+              <div className="relative" ref={langRefMobile}>
                 <button onClick={() => setIsLangOpen(!isLangOpen)} className="flex items-center gap-1 text-gray-700">
                   <Globe className="w-4 h-4" />
                   {languages.find(l => l.code === language)?.flag}
