@@ -78,7 +78,8 @@ const Layout = ({ children }: LayoutProps) => {
       if (servicesRef.current && !servicesRef.current.contains(e.target as Node)) {
         setIsServicesOpen(false);
       }
-      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+      if (langRef.current && !langRef.current.contains(e.target as Node) &&
+          langRefMobile.current && !langRefMobile.current.contains(e.target as Node)) {
         setIsLangOpen(false);
       }
     };
