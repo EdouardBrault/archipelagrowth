@@ -155,7 +155,7 @@ const Layout = ({ children }: LayoutProps) => {
 
             {/* Mobile menu button */}
             <div className="md:hidden flex items-center gap-3">
-              <div className="relative" ref={langRef}>
+              <div className="relative" ref={langRefMobile}>
                 <button onClick={() => setIsLangOpen(!isLangOpen)} className="flex items-center gap-1 text-gray-700">
                   <Globe className="w-4 h-4" />
                   {languages.find(l => l.code === language)?.flag}
