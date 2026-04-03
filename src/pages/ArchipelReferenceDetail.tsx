@@ -602,7 +602,7 @@ const ArchipelReferenceDetail = () => {
                         ))}
                       </div>
                       <span className="font-inter text-sm font-medium text-[#0043F1] hover:text-[#0043F1]/80 transition-colors inline-flex items-center gap-1">
-                        Voir l'étude de cas <span>→</span>
+                        {labels.viewCaseStudy} <span>→</span>
                       </span>
                     </div>
                   );
