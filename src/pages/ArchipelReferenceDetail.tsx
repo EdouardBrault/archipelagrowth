@@ -526,7 +526,7 @@ const ArchipelReferenceDetail = () => {
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}>
-              Le projet<br />de {client.name}
+              {labels.project}<br />{labels.projectOf} {client.name}
             </h2>
             <div className="font-inter text-[#010D3E]/70 text-base md:text-lg leading-relaxed">
               {client.projectContent.split('\n').map((line, i) => (
