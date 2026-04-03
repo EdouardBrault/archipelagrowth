@@ -12,6 +12,8 @@ import ServiceAuditCta from "@/components/ServiceAuditCta";
 import ContactFormSection from "@/components/ContactFormSection";
 import ServiceFaq, { type FaqItem } from "@/components/ServiceFaq";
 import ContactSection from "@/components/ContactSection";
+import { useLanguage } from "@/i18n";
+import { SERVICE_CONFIGS_IT } from "@/data/serviceConfigsIt";
 import screenshot1 from "@/assets/service-screenshot-1.png";
 import featureScreenshot1 from "@/assets/feature-screenshot-1.png";
 import featureScreenshot2 from "@/assets/feature-screenshot-2.png";
