@@ -39,7 +39,7 @@ const ArchipelNosReferences = () => {
   const [selectedSecteur, setSelectedSecteur] = useState<string>("");
   const [isLevierOpen, setIsLevierOpen] = useState(false);
   const [isSecteurOpen, setIsSecteurOpen] = useState(false);
-  const { t } = useLanguage();
+  const { t, localePath } = useLanguage();
 
   const closeAll = () => { setIsLevierOpen(false); setIsSecteurOpen(false); };
 
