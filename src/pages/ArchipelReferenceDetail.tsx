@@ -440,7 +440,7 @@ const ArchipelReferenceDetail = () => {
   const otherClients = ALL_CLIENTS.filter((c) => c.slug !== client.slug);
 
   const navigateToClient = (slug: string) => {
-    navigate(`/${slug}`);
+    navigate(localePath(`/${slug}`));
   };
 
   return (
