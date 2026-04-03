@@ -3,6 +3,8 @@ import ContactSection from "@/components/ContactSection";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useLanguage } from "@/i18n";
+import { CLIENT_REFERENCES_IT, REFERENCE_DETAIL_LABELS_IT } from "@/data/clientReferencesIt";
 
 const BLUE_FILTER_LOGOS = new Set([
   "/lovable-uploads/logo-fluidstack-blue.webp",
@@ -408,8 +410,25 @@ const ALL_CLIENTS: ClientData[] = [
 const ArchipelReferenceDetail = () => {
   const { clientSlug } = useParams<{ clientSlug: string }>();
   const navigate = useNavigate();
-  const client = ALL_CLIENTS.find(c => c.slug === clientSlug) || ALL_CLIENTS[0];
+  const { language, localePath } = useLanguage();
+  const isIt = language === "it";
+
+  const baseClient = ALL_CLIENTS.find(c => c.slug === clientSlug) || ALL_CLIENTS[0];
+  const itOverride = isIt && clientSlug ? CLIENT_REFERENCES_IT[clientSlug] : undefined;
+  const client: ClientData = itOverride
+    ? { ...baseClient, ...itOverride, stats: itOverride.stats.length > 0 ? itOverride.stats : baseClient.stats }
+    : baseClient;
   const hasContent = !!client.caseTitle;
+
+  const labels = isIt ? REFERENCE_DETAIL_LABELS_IT : {
+    caseOf: "Le cas",
+    defaultIntro: "Chez Archipel, nous sommes fiers de travailler avec des entreprises de toutes tailles et de toutes industries pour les aider à améliorer leurs performances et à atteindre leurs objectifs.",
+    project: "Le projet",
+    projectOf: "de",
+    challenge: "Le challenge",
+    objectives: "Les objectifs",
+    viewCaseStudy: "Voir l'étude de cas",
+  };
 
   const [carouselIndex, setCarouselIndex] = useState(0);
 
@@ -421,7 +440,7 @@ const ArchipelReferenceDetail = () => {
   const otherClients = ALL_CLIENTS.filter((c) => c.slug !== client.slug);
 
   const navigateToClient = (slug: string) => {
-    navigate(`/${slug}`);
+    navigate(localePath(`/${slug}`));
   };
 
   return (
@@ -434,7 +453,7 @@ const ArchipelReferenceDetail = () => {
             <div className="flex flex-col justify-center py-12 lg:pr-16">
               <div className="mb-8">
                 <span className="border border-gray-300 text-[#010D3E] font-medium text-sm px-6 py-2.5 rounded-full">
-                  Le cas {client.name}
+                  {labels.caseOf} {client.name}
                 </span>
               </div>
               <h1 className="font-jakarta text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-[1.05]" style={{
@@ -442,10 +461,10 @@ const ArchipelReferenceDetail = () => {
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}>
-                {hasContent ? client.caseTitle : `Le cas\n${client.name}`}
+                {hasContent ? client.caseTitle : `${labels.caseOf}\n${client.name}`}
               </h1>
               <p className="font-inter text-[#010D3E]/70 text-base md:text-lg leading-relaxed max-w-md">
-                {hasContent ? client.intro : "Chez Archipel, nous sommes fiers de travailler avec des entreprises de toutes tailles et de toutes industries pour les aider à améliorer leurs performances et à atteindre leurs objectifs."}
+                {hasContent ? client.intro : labels.defaultIntro}
               </p>
             </div>
 
@@ -507,7 +526,7 @@ const ArchipelReferenceDetail = () => {
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}>
-              Le projet<br />de {client.name}
+              {labels.project}<br />{labels.projectOf} {client.name}
             </h2>
             <div className="font-inter text-[#010D3E]/70 text-base md:text-lg leading-relaxed">
               {client.projectContent.split('\n').map((line, i) => (
@@ -525,7 +544,7 @@ const ArchipelReferenceDetail = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               {/* Le challenge */}
               <div className="text-center md:text-left">
-                <h3 className="font-jakarta text-2xl md:text-3xl font-bold text-[#010D3E] mb-6">Le challenge</h3>
+                <h3 className="font-jakarta text-2xl md:text-3xl font-bold text-[#010D3E] mb-6">{labels.challenge}</h3>
                 <div className="font-inter text-[#010D3E]/70 text-[15px] leading-relaxed">
                   {client.challengeContent.split('\n').map((line, i) => (
                     <p key={i} className="mb-3">{line}</p>
@@ -534,7 +553,7 @@ const ArchipelReferenceDetail = () => {
               </div>
               {/* Les objectifs */}
               <div className="text-center md:text-left">
-                <h3 className="font-jakarta text-2xl md:text-3xl font-bold text-[#010D3E] mb-6">Les objectifs</h3>
+                <h3 className="font-jakarta text-2xl md:text-3xl font-bold text-[#010D3E] mb-6">{labels.objectives}</h3>
                 <div className="font-inter text-[#010D3E]/70 text-[15px] leading-relaxed">
                   {client.objectivesContent.split('\n').map((line, i) => (
                     <p key={i} className="mb-3">{line}</p>
@@ -560,6 +579,8 @@ const ArchipelReferenceDetail = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[0, 1].map((offset) => {
                   const c = otherClients[(carouselIndex + offset) % otherClients.length];
+                  const cItOverride = isIt ? CLIENT_REFERENCES_IT[c.slug] : undefined;
+                  const cDesc = cItOverride?.description || c.description;
                   return (
                     <div
                       key={`${c.name}-${offset}`}
@@ -574,7 +595,7 @@ const ArchipelReferenceDetail = () => {
                         )}
                       </div>
                       <h4 className="font-jakarta font-bold text-[#010D3E] text-lg mb-1">{c.name}</h4>
-                      <p className="font-inter text-sm text-[#010D3E]/60 mb-4">{c.description}</p>
+                      <p className="font-inter text-sm text-[#010D3E]/60 mb-4">{cDesc}</p>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {c.tags.map((tag) => (
                           <span key={tag} className="px-3 py-1 text-xs font-inter font-medium rounded-full border border-[#010D3E]/20 text-[#010D3E]">
@@ -583,7 +604,7 @@ const ArchipelReferenceDetail = () => {
                         ))}
                       </div>
                       <span className="font-inter text-sm font-medium text-[#0043F1] hover:text-[#0043F1]/80 transition-colors inline-flex items-center gap-1">
-                        Voir l'étude de cas <span>→</span>
+                        {labels.viewCaseStudy} <span>→</span>
                       </span>
                     </div>
                   );

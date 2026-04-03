@@ -39,7 +39,7 @@ const ArchipelNosReferences = () => {
   const [selectedSecteur, setSelectedSecteur] = useState<string>("");
   const [isLevierOpen, setIsLevierOpen] = useState(false);
   const [isSecteurOpen, setIsSecteurOpen] = useState(false);
-  const { t } = useLanguage();
+  const { t, localePath } = useLanguage();
 
   const closeAll = () => { setIsLevierOpen(false); setIsSecteurOpen(false); };
 
@@ -100,7 +100,7 @@ const ArchipelNosReferences = () => {
             {filteredClients.map((client) => {
               const hasCaseStudy = !!client.caseStudyUrl;
               const CardWrapper = hasCaseStudy ? Link : 'div';
-              const cardProps = hasCaseStudy ? { to: client.caseStudyUrl, className: "bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300 block" } : { className: "bg-white border border-gray-200 rounded-2xl p-6 block" };
+              const cardProps = hasCaseStudy ? { to: localePath(client.caseStudyUrl), className: "bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300 block" } : { className: "bg-white border border-gray-200 rounded-2xl p-6 block" };
               return (
                 <CardWrapper key={client.name} {...cardProps as any}>
                   <div className="h-24 flex items-center justify-center mb-6">

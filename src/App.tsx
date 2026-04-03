@@ -95,6 +95,7 @@ const AppRoutes = () => (
       <Route path="/it/legal-notice" element={<MentionsLegales />} />
       <Route path="/it/privacy-policy" element={<PolitiqueConfidentialite />} />
       <Route path="/it/terms" element={<CGU />} />
+      <Route path="/it/:clientSlug" element={<ArchipelReferenceDetail />} />
 
       {/* Admin routes */}
       <Route path="/admin-login" element={<Navigate to="/admin-dashboard" replace />} />
