@@ -498,7 +498,22 @@ const ArchipelServiceGeneric = ({ serviceKey }: Props) => {
   const { language, localePath } = useLanguage();
   const baseConfig = SERVICE_CONFIGS[serviceKey];
   const itOverride = language === "it" ? SERVICE_CONFIGS_IT[serviceKey] : undefined;
-  const config = itOverride ? { ...baseConfig, ...itOverride, features: itOverride.features || baseConfig.features } as ServiceConfig : baseConfig;
+  // Merge Italian overrides, preserving images from base features
+  const config = itOverride
+    ? {
+        ...baseConfig,
+        ...itOverride,
+        features: itOverride.features
+          ? itOverride.features.map((f, i) => ({
+              ...baseConfig.features?.[i],
+              ...f,
+              image: f.image || baseConfig.features?.[i]?.image,
+            }))
+          : baseConfig.features,
+      } as ServiceConfig
+    : baseConfig;
+  const contactPath = localePath("/contact#contact-form");
+  const ctaLabel = language === "it" ? "Contattaci" : "Contact Us";
   const [visibleScreenshots, setVisibleScreenshots] = useState<number[]>([]);
   const heroRef = useRef<HTMLDivElement>(null);
   const [heroAnimated, setHeroAnimated] = useState(false);
