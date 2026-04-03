@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/i18n";
 import { CLIENT_REFERENCES_IT, REFERENCE_DETAIL_LABELS_IT } from "@/data/clientReferencesIt";
+import { CLIENT_REFERENCES_EN, REFERENCE_DETAIL_LABELS_EN } from "@/data/clientReferencesEn";
 
 const BLUE_FILTER_LOGOS = new Set([
   "/lovable-uploads/logo-fluidstack-blue.webp",
