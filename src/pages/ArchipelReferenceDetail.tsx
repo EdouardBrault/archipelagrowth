@@ -464,7 +464,7 @@ const ArchipelReferenceDetail = () => {
                 {hasContent ? client.caseTitle : `${labels.caseOf}\n${client.name}`}
               </h1>
               <p className="font-inter text-[#010D3E]/70 text-base md:text-lg leading-relaxed max-w-md">
-                {hasContent ? client.intro : "Chez Archipel, nous sommes fiers de travailler avec des entreprises de toutes tailles et de toutes industries pour les aider à améliorer leurs performances et à atteindre leurs objectifs."}
+                {hasContent ? client.intro : labels.defaultIntro}
               </p>
             </div>
 
