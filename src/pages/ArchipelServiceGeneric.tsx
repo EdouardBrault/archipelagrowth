@@ -603,7 +603,7 @@ const ArchipelServiceGeneric = ({ serviceKey }: Props) => {
                   size="lg"
                   className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-normal font-inter rounded-lg px-8"
                 >
-                  <Link to="/contact#contact-form">Contact Us</Link>
+                  <Link to={contactPath}>{ctaLabel}</Link>
                 </Button>
                 <Link
                    to="/contact#contact-form"
