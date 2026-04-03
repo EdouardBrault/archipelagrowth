@@ -276,7 +276,8 @@ export const CLIENT_REFERENCES_EN: Record<string, ClientDataEn> = {
 };
 
 export const REFERENCE_DETAIL_LABELS_EN = {
-  caseOf: "The",
+  caseOf: "",
+  caseSuffix: "'s case",
   defaultIntro: "At Archipel, we're proud to work with companies of all sizes and industries to help them improve their performance and achieve their goals.",
   project: "The project",
   projectOf: "for",
