@@ -553,7 +553,7 @@ const ArchipelReferenceDetail = () => {
               </div>
               {/* Les objectifs */}
               <div className="text-center md:text-left">
-                <h3 className="font-jakarta text-2xl md:text-3xl font-bold text-[#010D3E] mb-6">Les objectifs</h3>
+                <h3 className="font-jakarta text-2xl md:text-3xl font-bold text-[#010D3E] mb-6">{labels.objectives}</h3>
                 <div className="font-inter text-[#010D3E]/70 text-[15px] leading-relaxed">
                   {client.objectivesContent.split('\n').map((line, i) => (
                     <p key={i} className="mb-3">{line}</p>
