@@ -453,7 +453,7 @@ const ArchipelReferenceDetail = () => {
             <div className="flex flex-col justify-center py-12 lg:pr-16">
               <div className="mb-8">
                 <span className="border border-gray-300 text-[#010D3E] font-medium text-sm px-6 py-2.5 rounded-full">
-                  Le cas {client.name}
+                  {labels.caseOf} {client.name}
                 </span>
               </div>
               <h1 className="font-jakarta text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-[1.05]" style={{
