@@ -642,7 +642,7 @@ const ArchipelServiceGeneric = ({ serviceKey }: Props) => {
               size="lg"
               className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-normal font-inter rounded-lg px-8"
             >
-              <Link to="/contact#contact-form">{config.featuresIntro?.ctaLabel || `Your ${config.name} Score`}</Link>
+              <Link to={contactPath}>{config.featuresIntro?.ctaLabel || `Your ${config.name} Score`}</Link>
             </Button>
           </div>
         </section>
