@@ -585,8 +585,8 @@ const ArchipelReferenceDetail = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[0, 1].map((offset) => {
                   const c = otherClients[(carouselIndex + offset) % otherClients.length];
-                  const cItOverride = isIt ? CLIENT_REFERENCES_IT[c.slug] : undefined;
-                  const cDesc = cItOverride?.description || c.description;
+                  const cLangOverride = isIt ? CLIENT_REFERENCES_IT[c.slug] : isEn ? CLIENT_REFERENCES_EN[c.slug] : undefined;
+                  const cDesc = cLangOverride?.description || c.description;
                   return (
                     <div
                       key={`${c.name}-${offset}`}
