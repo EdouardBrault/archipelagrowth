@@ -467,7 +467,7 @@ const ArchipelReferenceDetail = () => {
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}>
-                {hasContent ? client.caseTitle : `${labels.caseOf}\n${client.name}`}
+                {hasContent ? client.caseTitle : ((labels as any).caseSuffix ? `${client.name}${(labels as any).caseSuffix}` : `${labels.caseOf}\n${client.name}`)}
               </h1>
               <p className="font-inter text-[#010D3E]/70 text-base md:text-lg leading-relaxed max-w-md">
                 {hasContent ? client.intro : labels.defaultIntro}
