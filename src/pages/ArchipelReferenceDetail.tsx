@@ -3,6 +3,8 @@ import ContactSection from "@/components/ContactSection";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useLanguage } from "@/i18n";
+import { CLIENT_REFERENCES_IT, REFERENCE_DETAIL_LABELS_IT } from "@/data/clientReferencesIt";
 
 const BLUE_FILTER_LOGOS = new Set([
   "/lovable-uploads/logo-fluidstack-blue.webp",
