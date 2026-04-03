@@ -606,7 +606,7 @@ const ArchipelServiceGeneric = ({ serviceKey }: Props) => {
                   <Link to={contactPath}>{ctaLabel}</Link>
                 </Button>
                 <Link
-                   to="/contact#contact-form"
+                   to={contactPath}
                   className="text-[#0043F1] font-normal font-inter flex items-center gap-1.5 hover:gap-2.5 transition-all"
                 >
                   {config.heroCtaSecondary || `Your ${config.name} Score`}
