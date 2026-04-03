@@ -495,7 +495,10 @@ interface Props {
 }
 
 const ArchipelServiceGeneric = ({ serviceKey }: Props) => {
-  const config = SERVICE_CONFIGS[serviceKey];
+  const { language, localePath } = useLanguage();
+  const baseConfig = SERVICE_CONFIGS[serviceKey];
+  const itOverride = language === "it" ? SERVICE_CONFIGS_IT[serviceKey] : undefined;
+  const config = itOverride ? { ...baseConfig, ...itOverride, features: itOverride.features || baseConfig.features } as ServiceConfig : baseConfig;
   const [visibleScreenshots, setVisibleScreenshots] = useState<number[]>([]);
   const heroRef = useRef<HTMLDivElement>(null);
   const [heroAnimated, setHeroAnimated] = useState(false);
