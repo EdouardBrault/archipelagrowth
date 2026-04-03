@@ -579,6 +579,8 @@ const ArchipelReferenceDetail = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[0, 1].map((offset) => {
                   const c = otherClients[(carouselIndex + offset) % otherClients.length];
+                  const cItOverride = isIt ? CLIENT_REFERENCES_IT[c.slug] : undefined;
+                  const cDesc = cItOverride?.description || c.description;
                   return (
                     <div
                       key={`${c.name}-${offset}`}
@@ -593,7 +595,7 @@ const ArchipelReferenceDetail = () => {
                         )}
                       </div>
                       <h4 className="font-jakarta font-bold text-[#010D3E] text-lg mb-1">{c.name}</h4>
-                      <p className="font-inter text-sm text-[#010D3E]/60 mb-4">{c.description}</p>
+                      <p className="font-inter text-sm text-[#010D3E]/60 mb-4">{cDesc}</p>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {c.tags.map((tag) => (
                           <span key={tag} className="px-3 py-1 text-xs font-inter font-medium rounded-full border border-[#010D3E]/20 text-[#010D3E]">
