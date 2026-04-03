@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/i18n";
 import { CLIENT_REFERENCES_IT, REFERENCE_DETAIL_LABELS_IT } from "@/data/clientReferencesIt";
+import { CLIENT_REFERENCES_EN, REFERENCE_DETAIL_LABELS_EN } from "@/data/clientReferencesEn";
 
 const BLUE_FILTER_LOGOS = new Set([
   "/lovable-uploads/logo-fluidstack-blue.webp",
@@ -412,23 +413,28 @@ const ArchipelReferenceDetail = () => {
   const navigate = useNavigate();
   const { language, localePath } = useLanguage();
   const isIt = language === "it";
+  const isEn = language === "en";
 
   const baseClient = ALL_CLIENTS.find(c => c.slug === clientSlug) || ALL_CLIENTS[0];
-  const itOverride = isIt && clientSlug ? CLIENT_REFERENCES_IT[clientSlug] : undefined;
-  const client: ClientData = itOverride
-    ? { ...baseClient, ...itOverride, stats: itOverride.stats.length > 0 ? itOverride.stats : baseClient.stats }
+  const langOverride = isIt && clientSlug ? CLIENT_REFERENCES_IT[clientSlug]
+    : isEn && clientSlug ? CLIENT_REFERENCES_EN[clientSlug]
+    : undefined;
+  const client: ClientData = langOverride
+    ? { ...baseClient, ...langOverride, stats: langOverride.stats.length > 0 ? langOverride.stats : baseClient.stats }
     : baseClient;
   const hasContent = !!client.caseTitle;
 
-  const labels = isIt ? REFERENCE_DETAIL_LABELS_IT : {
-    caseOf: "Le cas",
-    defaultIntro: "Chez Archipel, nous sommes fiers de travailler avec des entreprises de toutes tailles et de toutes industries pour les aider à améliorer leurs performances et à atteindre leurs objectifs.",
-    project: "Le projet",
-    projectOf: "de",
-    challenge: "Le challenge",
-    objectives: "Les objectifs",
-    viewCaseStudy: "Voir l'étude de cas",
-  };
+  const labels = isIt ? REFERENCE_DETAIL_LABELS_IT
+    : isEn ? REFERENCE_DETAIL_LABELS_EN
+    : {
+      caseOf: "Le cas",
+      defaultIntro: "Chez Archipel, nous sommes fiers de travailler avec des entreprises de toutes tailles et de toutes industries pour les aider à améliorer leurs performances et à atteindre leurs objectifs.",
+      project: "Le projet",
+      projectOf: "de",
+      challenge: "Le challenge",
+      objectives: "Les objectifs",
+      viewCaseStudy: "Voir l'étude de cas",
+    };
 
   const [carouselIndex, setCarouselIndex] = useState(0);
 
@@ -579,8 +585,8 @@ const ArchipelReferenceDetail = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[0, 1].map((offset) => {
                   const c = otherClients[(carouselIndex + offset) % otherClients.length];
-                  const cItOverride = isIt ? CLIENT_REFERENCES_IT[c.slug] : undefined;
-                  const cDesc = cItOverride?.description || c.description;
+                  const cLangOverride = isIt ? CLIENT_REFERENCES_IT[c.slug] : isEn ? CLIENT_REFERENCES_EN[c.slug] : undefined;
+                  const cDesc = cLangOverride?.description || c.description;
                   return (
                     <div
                       key={`${c.name}-${offset}`}
