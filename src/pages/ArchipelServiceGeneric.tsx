@@ -12,6 +12,8 @@ import ServiceAuditCta from "@/components/ServiceAuditCta";
 import ContactFormSection from "@/components/ContactFormSection";
 import ServiceFaq, { type FaqItem } from "@/components/ServiceFaq";
 import ContactSection from "@/components/ContactSection";
+import { useLanguage } from "@/i18n";
+import { SERVICE_CONFIGS_IT } from "@/data/serviceConfigsIt";
 import screenshot1 from "@/assets/service-screenshot-1.png";
 import featureScreenshot1 from "@/assets/feature-screenshot-1.png";
 import featureScreenshot2 from "@/assets/feature-screenshot-2.png";
@@ -493,7 +495,25 @@ interface Props {
 }
 
 const ArchipelServiceGeneric = ({ serviceKey }: Props) => {
-  const config = SERVICE_CONFIGS[serviceKey];
+  const { language, localePath } = useLanguage();
+  const baseConfig = SERVICE_CONFIGS[serviceKey];
+  const itOverride = language === "it" ? SERVICE_CONFIGS_IT[serviceKey] : undefined;
+  // Merge Italian overrides, preserving images from base features
+  const config = itOverride
+    ? {
+        ...baseConfig,
+        ...itOverride,
+        features: itOverride.features
+          ? itOverride.features.map((f, i) => ({
+              ...baseConfig.features?.[i],
+              ...f,
+              image: f.image || baseConfig.features?.[i]?.image,
+            }))
+          : baseConfig.features,
+      } as ServiceConfig
+    : baseConfig;
+  const contactPath = localePath("/contact#contact-form");
+  const ctaLabel = language === "it" ? "Contattaci" : "Contact Us";
   const [visibleScreenshots, setVisibleScreenshots] = useState<number[]>([]);
   const heroRef = useRef<HTMLDivElement>(null);
   const [heroAnimated, setHeroAnimated] = useState(false);
@@ -583,10 +603,10 @@ const ArchipelServiceGeneric = ({ serviceKey }: Props) => {
                   size="lg"
                   className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-normal font-inter rounded-lg px-8"
                 >
-                  <Link to="/contact#contact-form">Contact Us</Link>
+                  <Link to={contactPath}>{ctaLabel}</Link>
                 </Button>
                 <Link
-                   to="/contact#contact-form"
+                   to={contactPath}
                   className="text-[#0043F1] font-normal font-inter flex items-center gap-1.5 hover:gap-2.5 transition-all"
                 >
                   {config.heroCtaSecondary || `Your ${config.name} Score`}
@@ -622,7 +642,7 @@ const ArchipelServiceGeneric = ({ serviceKey }: Props) => {
               size="lg"
               className="bg-[#0043F1] text-white hover:bg-[#0043F1]/90 font-normal font-inter rounded-lg px-8"
             >
-              <Link to="/contact#contact-form">{config.featuresIntro?.ctaLabel || `Your ${config.name} Score`}</Link>
+              <Link to={contactPath}>{config.featuresIntro?.ctaLabel || `Your ${config.name} Score`}</Link>
             </Button>
           </div>
         </section>
